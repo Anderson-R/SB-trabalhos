@@ -58,12 +58,21 @@ int containRot(string line, string *rot){
     return 2;
 }
 
+//verifies if label exists in simbol table. if exists(error) returns 1, if not add label to table and returns 0
 int validateLabel(string label, int posCounter){
-    
+
     if(simbolTable.find(label) != simbolTable.end()) return 1;
     
     simbolTable.insert(pair<string, int>(label, posCounter));
     return 0;
+}
+
+//returns the value of the label, if it doesn't exists in simbolTable returns -1
+int labelValue(string label){
+    map<string,int>::iterator it;
+    it = simbolTable.find(label);
+    if(it == simbolTable.end()) return -1;
+    return it->second;
 }
 
 //retorna a instrução da linha

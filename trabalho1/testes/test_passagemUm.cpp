@@ -76,11 +76,23 @@ int main(){
     else
         cout<<"\33[1;31m validateLabel-Test 1 FAILED"<<endl;
 
-    //-validateLabel-test 1
+    //-validateLabel-test 2
     if(validateLabel("l1", 7) == 1)
-        cout<<"\33[1;32m validateLabel-Test 1 SUCCEEDED"<<endl;
+        cout<<"\33[1;32m validateLabel-Test 2 SUCCEEDED"<<endl;
     else
-        cout<<"\33[1;31m validateLabel-Test 1 FAILED"<<endl;
+        cout<<"\33[1;31m validateLabel-Test 2 FAILED"<<endl;
+
+    //-labelValue-test 1
+    if(labelValue("l1") == 7)
+        cout<<"\33[1;32m labelValue-Test 1 SUCCEEDED"<<endl;
+    else
+        cout<<"\33[1;31m labelValue-Test 1 FAILED"<<endl;
+
+    //-labelValue-test 2
+    if(labelValue("l2") == -1)
+        cout<<"\33[1;32m labelValue-Test 2 SUCCEEDED"<<endl;
+    else
+        cout<<"\33[1;31m labelValue-Test 2 FAILED"<<endl;
 
     return 0;
 }
