@@ -9,6 +9,7 @@
 
 using namespace std;
 
+//Map of all valid instructions
 map<string, int> INSTRUCTIONS = {{"ADD", 1},
                                 {"SUB", 2},
                                 {"MULT", 3},
@@ -22,7 +23,11 @@ map<string, int> INSTRUCTIONS = {{"ADD", 1},
                                 {"STORE", 11},
                                 {"INPUT", 12},
                                 {"OUTPUT", 13},
-                                {"STOP", 14}};
+                                {"STOP", 14}
+};
+
+//Map for the simbol table
+map<string, int> simbolTable;
 
 //separa a string in em uma ou mais strings usando o token como ponto de separação
 vector<string> split(string in, char token){
@@ -51,6 +56,14 @@ int containRot(string line, string *rot){
         return 0;
     }
     return 2;
+}
+
+int validateLabel(string label, int posCounter){
+    
+    if(simbolTable.find(label) != simbolTable.end()) return 1;
+    
+    simbolTable.insert(pair<string, int>(label, posCounter));
+    return 0;
 }
 
 //retorna a instrução da linha
@@ -84,7 +97,6 @@ bool verifyInst(string inst){
 
     return false;
 }
-
 
 
 

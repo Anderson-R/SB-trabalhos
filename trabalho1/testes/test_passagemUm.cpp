@@ -70,5 +70,17 @@ int main(){
     else
         cout<<"\33[1;31m verifyInst-Test 2 FAILED"<<endl;
 
+    //-validateLabel-test 1
+    if(validateLabel("l1", 7) == 0 && simbolTable.at("l1") == 7)
+        cout<<"\33[1;32m validateLabel-Test 1 SUCCEEDED"<<endl;
+    else
+        cout<<"\33[1;31m validateLabel-Test 1 FAILED"<<endl;
+
+    //-validateLabel-test 1
+    if(validateLabel("l1", 7) == 1)
+        cout<<"\33[1;32m validateLabel-Test 1 SUCCEEDED"<<endl;
+    else
+        cout<<"\33[1;31m validateLabel-Test 1 FAILED"<<endl;
+
     return 0;
 }
