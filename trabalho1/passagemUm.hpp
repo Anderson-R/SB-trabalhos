@@ -131,6 +131,7 @@ bool verifyOperands(string line){
     return false;
 }
 
+//Faz a primeira passagem em todo o código fonte pre-processado
 void passagemUm(map<string, int> pre, vector<string> program){
 
     string line, label;
