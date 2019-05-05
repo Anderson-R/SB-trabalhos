@@ -154,5 +154,17 @@ int main(){
     else
         cout<<"\33[1;31m verifyOperands-Test 10 FAILED"<<endl;
 
+    //-verifyDir-test 1
+    if(verifyDir("CONST") == true)
+        cout<<"\33[1;32m verifyDir-Test 1 SUCCEEDED"<<endl;
+    else
+        cout<<"\33[1;31m verifyDir-Test 1 FAILED"<<endl;
+
+    //-verifyDir-test 2
+    if(verifyDir("SPACE") == true)
+        cout<<"\33[1;32m verifyDir-Test 2 SUCCEEDED"<<endl;
+    else
+        cout<<"\33[1;31m verifyDir-Test 2 FAILED"<<endl;
+
     return 0;
 }

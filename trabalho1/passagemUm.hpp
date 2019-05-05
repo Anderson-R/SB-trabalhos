@@ -10,7 +10,7 @@
 using namespace std;
 
 //Map of all valid instructions
-const map<string, int> INSTRUCTIONS = {{"ADD", 1},
+map<string, int> INSTRUCTIONS = {{"ADD", 1},
                                 {"SUB", 2},
                                 {"MULT", 3},
                                 {"DIV", 4},
@@ -26,7 +26,7 @@ const map<string, int> INSTRUCTIONS = {{"ADD", 1},
                                 {"STOP", 14}
 };
 
-const vector<string> DIRETIVAS = {{"CONST"}, {"SPACE"}}
+vector<string> DIRETIVAS = {{"CONST"}, {"SPACE"}};
 
 //Map for the simbol table
 map<string, int> simbolTable;
@@ -159,13 +159,19 @@ void passagemUm(map<string, int> pre, vector<string> program){
                     cout<< "\33[1;31m"<< "ERRO semantico na linha: "<< pre.at(line)<< "\033[0m"<< endl;
             };
 
-            //instrução
+            //instrução e diretiva
             string inst = getInst(line);
-            if(!verifyInst(inst))
-                cout<< "\33[1;31m"<< "ERRO sintatico na linha: "<< pre.at(line)<< "\033[0m"<< endl;
-            else{
-                if(inst == "COPY")
+            if(!verifyInst(inst) && !verifyDir(inst)){
+                cout<< "\33[1;31m"<< "ERRO sintatico/lexico na linha: "<< pre.at(line)<< "\033[0m"<< endl;
             }
+            else{
+                if(inst == "COPY") posCounter += 3;
+                else if(inst == "STOP") posCounter += 1;
+                else if(inst == "CONST"){}
+                else if(inst == "SPACE"){}
+                else posCounter += 2;
+            }
+            lineCounter++;
         }
     }
 }
