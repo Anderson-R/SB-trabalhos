@@ -94,5 +94,65 @@ int main(){
     else
         cout<<"\33[1;31m labelValue-Test 2 FAILED"<<endl;
 
+    //-verifyOperands-test 1
+    if(verifyOperands("STOP") == true)
+        cout<<"\33[1;32m verifyOperands-Test 1 SUCCEEDED"<<endl;
+    else
+        cout<<"\33[1;31m verifyOperands-Test 1 FAILED"<<endl;
+
+    //-verifyOperands-test 2
+    if(verifyOperands("STOP l1") == false)
+        cout<<"\33[1;32m verifyOperands-Test 2 SUCCEEDED"<<endl;
+    else
+        cout<<"\33[1;31m verifyOperands-Test 2 FAILED"<<endl;
+
+    //-verifyOperands-test 3
+    if(verifyOperands("COPY l1,") == false)
+        cout<<"\33[1;32m verifyOperands-Test 3 SUCCEEDED"<<endl;
+    else
+        cout<<"\33[1;31m verifyOperands-Test 3 FAILED"<<endl;
+
+    //-verifyOperands-test 4
+    if(verifyOperands("COPY l1, l2") == true)
+        cout<<"\33[1;32m verifyOperands-Test 4 SUCCEEDED"<<endl;
+    else
+        cout<<"\33[1;31m verifyOperands-Test 4 FAILED"<<endl;
+
+    //-verifyOperands-test 5
+    if(verifyOperands("ADD l1, l2") == false)
+        cout<<"\33[1;32m verifyOperands-Test 5 SUCCEEDED"<<endl;
+    else
+        cout<<"\33[1;31m verifyOperands-Test 5 FAILED"<<endl;
+
+    //-verifyOperands-test 6
+    if(verifyOperands("ADD l1") == true)
+        cout<<"\33[1;32m verifyOperands-Test 6 SUCCEEDED"<<endl;
+    else
+        cout<<"\33[1;31m verifyOperands-Test 6 FAILED"<<endl;
+
+    //-verifyOperands-test 7
+    if(verifyOperands("ADD l1, ") == false)
+        cout<<"\33[1;32m verifyOperands-Test 7 SUCCEEDED"<<endl;
+    else
+        cout<<"\33[1;31m verifyOperands-Test 7 FAILED"<<endl;
+
+    //-verifyOperands-test 8
+    if(verifyOperands("COPY l1, ") == false)
+        cout<<"\33[1;32m verifyOperands-Test 8 SUCCEEDED"<<endl;
+    else
+        cout<<"\33[1;31m verifyOperands-Test 8 FAILED"<<endl;
+
+    //-verifyOperands-test 9
+    if(verifyOperands("COPY , l1") == false)
+        cout<<"\33[1;32m verifyOperands-Test 9 SUCCEEDED"<<endl;
+    else
+        cout<<"\33[1;31m verifyOperands-Test 9 FAILED"<<endl;
+
+    //-verifyOperands-test 10
+    if(verifyOperands("L1: DIV DOIS") == true)
+        cout<<"\33[1;32m verifyOperands-Test 10 SUCCEEDED"<<endl;
+    else
+        cout<<"\33[1;31m verifyOperands-Test 10 FAILED"<<endl;
+
     return 0;
 }
