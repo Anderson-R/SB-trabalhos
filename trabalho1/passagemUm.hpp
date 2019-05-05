@@ -10,7 +10,7 @@
 using namespace std;
 
 //Map of all valid instructions
-map<string, int> INSTRUCTIONS = {{"ADD", 1},
+const map<string, int> INSTRUCTIONS = {{"ADD", 1},
                                 {"SUB", 2},
                                 {"MULT", 3},
                                 {"DIV", 4},
@@ -25,6 +25,8 @@ map<string, int> INSTRUCTIONS = {{"ADD", 1},
                                 {"OUTPUT", 13},
                                 {"STOP", 14}
 };
+
+const vector<string> DIRETIVAS = {{"CONST"}, {"SPACE"}}
 
 //Map for the simbol table
 map<string, int> simbolTable;
@@ -106,6 +108,13 @@ bool verifyInst(string inst){
     return it != INSTRUCTIONS.end();
 }
 
+bool verifyDir(string dir){
+    for(int i=0; i<DIRETIVAS.size(); i++)
+        if(dir == DIRETIVAS.at(i)) return true;
+
+    return false;
+}
+
 bool verifyOperands(string line){
     string inst = getInst(line);
     int instSize = inst.size();
@@ -120,6 +129,45 @@ bool verifyOperands(string line){
         return true;
 
     return false;
+}
+
+void passagemUm(map<string, int> pre, vector<string> program){
+
+    string line, label;
+    int posCounter=0, lineCounter=1;
+    bool inText=false, inData=false;
+    for(int i=0; i<program.size(); i++){
+        line = program.at(i);
+        
+        //section
+        if(line == "SECTION TEXT") {
+            inText = true;
+            inData = false;
+            i++;
+            line = program.at(i);
+        }
+        else if(line == "SECTION DATA"){
+            inText = false;
+            inData = true;
+            i++;
+            line = program.at(i);
+        }
+        if(inText){
+            //rotulo
+            if(containRot(line, &label) == 0){
+                if(validateLabel(label, posCounter) == 1)
+                    cout<< "\33[1;31m"<< "ERRO semantico na linha: "<< pre.at(line)<< "\033[0m"<< endl;
+            };
+
+            //instrução
+            string inst = getInst(line);
+            if(!verifyInst(inst))
+                cout<< "\33[1;31m"<< "ERRO sintatico na linha: "<< pre.at(line)<< "\033[0m"<< endl;
+            else{
+                if(inst == "COPY")
+            }
+        }
+    }
 }
 
 
