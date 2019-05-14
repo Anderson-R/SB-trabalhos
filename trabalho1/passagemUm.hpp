@@ -28,6 +28,9 @@ map<string, int> INSTRUCTIONS = {{"ADD", 1},
 
 vector<string> DIRETIVAS = {{"CONST"}, {"SPACE"}};
 
+//<posCounter, value>
+map<int, int> data;
+
 //Map for the simbol table
 map<string, int> simbolTable;
 
@@ -131,6 +134,13 @@ bool verifyOperands(string line){
     return false;
 }
 
+int constDir(int posCounter, string line){
+    int b = line.find("CONST");
+    int value = stoi(line.substr(b+6, 100));
+    data.insert(posCounter, value);
+    return 1;
+}
+
 //Faz a primeira passagem em todo o código fonte pre-processado
 void passagemUm(map<string, int> pre, vector<string> program){
 
@@ -168,7 +178,7 @@ void passagemUm(map<string, int> pre, vector<string> program){
             else{
                 if(inst == "COPY") posCounter += 3;
                 else if(inst == "STOP") posCounter += 1;
-                else if(inst == "CONST"){}
+                //else if(inst == "CONST") posCounter += constDir(posCounter, );
                 else if(inst == "SPACE"){}
                 else posCounter += 2;
             }
