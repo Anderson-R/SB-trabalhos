@@ -135,40 +135,57 @@ bool verifyOperands(string line){
 }
 
 int constDir(int posCounter, string line){
-    int b = line.find("CONST");
-    int value = stoi(line.substr(b+6, 100));
-    data.insert(posCounter, value);
+    int pos = line.find("CONST");
+    if(line.length() == (pos+5)) return -1;
+    int value = stoi(line.substr(pos+6, 100));
+    data.insert(pair<int, int>(posCounter, value));
     return 1;
 }
 
-//Faz a primeira passagem em todo o código fonte pre-processado
-void passagemUm(map<string, int> pre, vector<string> program){
+int spaceDir(int posCounter, string line){
+    int pos = line.find("SPACE");
+    if(line.length() == (pos+5)){
+        data.insert(pair<int, int>(posCounter, 0));
+        return 1;
+    }
+    int value = stoi(line.substr(pos+6, 100));
+    for(int i=0; i<value; i++)
+        data.insert(pair<int, int>(posCounter+i, 0));
+    return value;
+}
 
+//Faz a primeira passagem em todo o código fonte pre-processado
+map<string, int> passagemUm(map<string, int> pre, vector<string> program){
+    simbolTable.clear();
     string line, label;
     int posCounter=0, lineCounter=1;
     bool inText=false, inData=false;
     for(int i=0; i<program.size(); i++){
         line = program.at(i);
-        
         //section
         if(line == "SECTION TEXT") {
             inText = true;
             inData = false;
             i++;
             line = program.at(i);
+            lineCounter++;
         }
         else if(line == "SECTION DATA"){
             inText = false;
             inData = true;
             i++;
             line = program.at(i);
+            lineCounter++;
         }
-        if(inText){
+        
+
+        if(inText || inData){
             //rotulo
             if(containRot(line, &label) == 0){
                 if(validateLabel(label, posCounter) == 1)
                     cout<< "\33[1;31m"<< "ERRO semantico na linha: "<< pre.at(line)<< "\033[0m"<< endl;
             };
+            label.erase();
 
             //instrução e diretiva
             string inst = getInst(line);
@@ -177,14 +194,21 @@ void passagemUm(map<string, int> pre, vector<string> program){
             }
             else{
                 if(inst == "COPY") posCounter += 3;
-                else if(inst == "STOP") posCounter += 1;
-                //else if(inst == "CONST") posCounter += constDir(posCounter, );
-                else if(inst == "SPACE"){}
+                else if(inst == "STOP") posCounter++;
+                else if(inst == "CONST") {
+                    if(constDir(posCounter, line) == -1)
+                        cout<< "\33[1;31m"<< "ERRO sintatico na linha: "<< pre.at(line)<< "\033[0m"<< endl;
+                    else
+                        posCounter++;
+                }
+                else if(inst == "SPACE") posCounter += spaceDir(posCounter, line);
                 else posCounter += 2;
             }
-            lineCounter++;
         }
+
+        lineCounter++;
     }
+    return simbolTable;
 }
 
 
