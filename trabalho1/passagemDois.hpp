@@ -8,7 +8,7 @@ bool verifyOperands(string line){
     int instSize = inst.size();
     size_t pos = line.find(inst);
     string operands = line.substr(pos+instSize);
-    vector<string> separatedOp = split(operands, ',');
+    vector<string> separatedOp = splitPUm(operands, ',');
     if(separatedOp.size() == 1 && separatedOp[0].size() == 0 && INSTRUCTIONS.at(inst) == 14)
         return true;
     if(separatedOp.size() == 1 && separatedOp[0].size() > 1 && INSTRUCTIONS.at(inst) != 14) 
@@ -17,6 +17,18 @@ bool verifyOperands(string line){
         return true;
 
     return false;
+}
+
+void operands(string line){
+    string inst = getInst(line);
+    int instSize = inst.size();
+    size_t pos = line.find(inst);
+    string operands = line.substr(pos+instSize);
+    vector<string> separatedOp = splitPUm(operands, ',');
+    if(separatedOp.size() == 1 && separatedOp.at(0).size()>0){
+        int op = stoi(separatedOp.at(0));
+    }
+
 }
 
 
