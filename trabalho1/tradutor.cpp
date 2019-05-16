@@ -17,14 +17,20 @@ int main(int argc, char** argv){
 
 	std::ifstream main_reader;
     main_reader.open(argv[1]);
-    std::ofstream preWriter(split(argv[1], '.').front() + ".pre");
+    std::fstream preWriter(split(argv[1], '.').front() + ".pre");
 
 	if(! main_reader) {
 		std::cout << "Error opening file!" << std::endl;
 		return 0;
 	}
 
-    passagemZero(main_reader, preWriter);
+	std::map<std::string, int> preFile;
+	std::vector<std::string> program;
+    passagemZero(main_reader, preWriter, preFile, program);
+	passagemUm(preFile, program);
+    
+    main_reader.close();
+	preWriter.close();
 
     return 0;  
 }
