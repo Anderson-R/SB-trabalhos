@@ -35,7 +35,7 @@ map<int, int> data;
 map<string, int> simbolTable;
 
 //separa a string in em uma ou mais strings usando o token como ponto de separação
-vector<string> split(string in, char token){
+vector<string> splitPUm(string in, char token){
     vector<string> vec;
     int j = 0;
     vec.push_back("");
@@ -52,7 +52,7 @@ vector<string> split(string in, char token){
 //caso haja rotulo o salva em rot e retorna 0, caso contrario retorna 1, erro retorna 2
 int containRot(string line, string *rot){
     vector<string> vec;
-    vec = split(line, ':');
+    vec = splitPUm(line, ':');
     if(vec.size() == 1 && vec[0] != "") return 1;
 
     if(vec.size() == 2 && vec[0] != "" && vec[1] != ""){
@@ -86,11 +86,11 @@ string getInst(string line){
     string rot;
     int ctnRot = containRot(line, &rot);
     if(ctnRot == 1)
-        inst = split(line, ' ')[0];
+        inst = splitPUm(line, ' ')[0];
     else if(ctnRot == 0){
         line.erase(0, rot.size()+1);
         if(line.at(0) == ' ') line.erase(0, 1);
-        inst = split(line, ' ')[0];
+        inst = splitPUm(line, ' ')[0];
     }
     locale loc;
     for(int i=0; i< inst.length(); i++){

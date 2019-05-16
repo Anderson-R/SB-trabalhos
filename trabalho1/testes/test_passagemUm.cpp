@@ -1,5 +1,6 @@
 #include <iostream>
 #include "../passagemUm.hpp"
+#include "../passagemDois.hpp"
 #include <vector>
 #include <string>
 
@@ -217,6 +218,9 @@ int main(){
     map<const int, int>::iterator it2 = data.begin();
     for (it2=data.begin(); it2!=data.end(); ++it2)
         std::cout << it2->first << " => " << it2->second << '\n';
+
+    string stoiStr = {"5"};
+    cout<<std::stoi(stoiStr)<<endl;
 
     return 0;
 }
