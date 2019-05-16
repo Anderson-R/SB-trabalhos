@@ -193,16 +193,24 @@ map<string, int> passagemUm(map<string, int> pre, vector<string> program){
                 cout<< "\33[1;31m"<< "ERRO sintatico/lexico na linha: "<< pre.at(line)<< "\033[0m"<< endl;
             }
             else{
-                if(inst == "COPY") posCounter += 3;
-                else if(inst == "STOP") posCounter++;
-                else if(inst == "CONST") {
+                if(inst == "COPY" && inText) posCounter += 3;
+                else if(inst == "COPY" && inData)
+                    cout<< "\33[1;31m"<< "ERRO semantico na linha: "<< pre.at(line)<< "\033[0m"<< endl;
+                else if(inst == "STOP" && inText) posCounter++;
+                else if(inst == "STOP" && inData)
+                    cout<< "\33[1;31m"<< "ERRO semantico na linha: "<< pre.at(line)<< "\033[0m"<< endl;
+                else if(inst == "CONST" && inData) {
                     if(constDir(posCounter, line) == -1)
                         cout<< "\33[1;31m"<< "ERRO sintatico na linha: "<< pre.at(line)<< "\033[0m"<< endl;
                     else
                         posCounter++;
                 }
-                else if(inst == "SPACE") posCounter += spaceDir(posCounter, line);
-                else posCounter += 2;
+                else if(inst == "CONST" && inText)
+                    cout<< "\33[1;31m"<< "ERRO semantico na linha: "<< pre.at(line)<< "\033[0m"<< endl;
+                else if(inst == "SPACE" && inData) posCounter += spaceDir(posCounter, line);
+                else if(inst == "SPACE" && inText)
+                    cout<< "\33[1;31m"<< "ERRO semantico na linha: "<< pre.at(line)<< "\033[0m"<< endl;
+                else if(inText) posCounter += 2;
             }
         }
 
