@@ -211,7 +211,12 @@ int main(){
     cout<<"======================="<<endl;
     map<string,int>::iterator it = simbolTable.begin();
     for (it=simbolTable.begin(); it!=simbolTable.end(); ++it)
-    std::cout << it->first << " => " << it->second << '\n';
+        std::cout << it->first << " => " << it->second << '\n';
+
+    cout<<"======================="<<endl;
+    map<const int, int>::iterator it2 = data.begin();
+    for (it2=data.begin(); it2!=data.end(); ++it2)
+        std::cout << it2->first << " => " << it2->second << '\n';
 
     return 0;
 }
