@@ -1,6 +1,7 @@
 #include <iostream>
 #include <fstream>
 #include <vector>
+#include <string>
 
 // Needed for istringstream
 #include <sstream>
@@ -54,31 +55,13 @@ std::string strCapitalize(const std::string str){
     return capitalized;
 }
 
-int main(int argc, char** argv){
-
-	if(argc < 2){
-		std::cout << "No filename was passed to be translated!" << std::endl;
-		return 0;
-	}
-
-	else if(split(argv[1], '.').back() != "asm"){
-		std::cout << "Filename isn't an assembly source code!" << std::endl;
-		return 0;
-	}
-
-	std::ifstream main_reader(argv[1]);
-
-	if(! main_reader) {
-		std::cout << "Error opening file!" << std::endl;
-		return 0;
-	}
+int passagemZero(std::ifstream& main_reader, std::ofstream& preWriter){
 
 	bool newLine = true;
 	bool EQUfound; // Flag for EQU directive
 	std::string token;
 	std::vector<std::string> tokens;
 	std::vector<std::string> EQUtable;
-	std::ofstream preWriter(split(argv[1], '.').front() + ".pre");
 	std::string rawLine;
 	int origLineNum = 1; // Line number in the original .asm file
 	int iEQU; // For indexing the EQUATE table
