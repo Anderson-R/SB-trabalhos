@@ -2,6 +2,7 @@
 #include <fstream>
 #include <vector>
 #include <string>
+#include <map>
 
 // Needed for istringstream
 #include <sstream>
@@ -55,7 +56,22 @@ std::string strCapitalize(const std::string str){
     return capitalized;
 }
 
-int passagemZero(std::ifstream& main_reader, std::ofstream& preWriter){
+//passes the .pre file to a map with its original file line number
+std::map<std::string, int> preToMap(std::fstream& preWriter, std::vector<int> lines, std::vector<std::string>& program){
+	std::map<std::string, int> ret;
+	preWriter.seekp(0);
+	for(int i=0; i<lines.size(); i++){
+		std::string line;
+		std::getline(preWriter, line);
+		program.push_back(line);
+		ret.insert(std::pair<std::string, int>(line, lines.at(i)));
+	}
+	return ret;
+}
+
+int passagemZero(std::ifstream& main_reader, std::fstream& preWriter, std::map<std::string, int>& mapRet, std::vector<std::string>& vecRet){
+
+	std::vector<int> lines;
 
 	bool newLine = true;
 	bool EQUfound; // Flag for EQU directive
@@ -101,7 +117,8 @@ int passagemZero(std::ifstream& main_reader, std::ofstream& preWriter){
 
 							// Place spaces between tokens and enumerates lines according to .asm
 							if(newLine == true){
-								preWriter << origLineNum << ' ';
+								//preWriter << origLineNum << ' ';
+								lines.push_back(origLineNum);
 								newLine = false;
 							}
 							else
@@ -131,9 +148,7 @@ int passagemZero(std::ifstream& main_reader, std::ofstream& preWriter){
 		}
 		origLineNum++;
 	}
-
-	main_reader.close();
-	preWriter.close();
+	mapRet = preToMap(preWriter, lines, vecRet);
 
 	return 0;
 
