@@ -17,8 +17,9 @@ int main(int argc, char** argv){
 
 	std::ifstream main_reader;
     main_reader.open(argv[1]);
-    std::fstream preWriter(split(argv[1], '.').front() + ".pre");
-
+    std::fstream preWriter;
+	preWriter.open(split(argv[1], '.').front() + ".pre", std::fstream::in | std::fstream::out | std::fstream::trunc);
+	
 	if(! main_reader) {
 		std::cout << "Error opening file!" << std::endl;
 		return 0;
