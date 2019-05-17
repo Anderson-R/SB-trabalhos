@@ -2,6 +2,7 @@
 #include <iostream>
 #include "passagemZero.hpp"
 #include "passagemUm.hpp"
+#include "passagemDois.hpp"
 
 int main(int argc, char** argv){
 
@@ -28,7 +29,7 @@ int main(int argc, char** argv){
 	std::map<std::string, int> preFile;
 	std::vector<std::string> program;
     passagemZero(main_reader, preWriter, preFile, program);
-	passagemUm(preFile, program);
+	std::map<std::string, int> st = passagemUm(preFile, program);
     
     main_reader.close();
 	preWriter.close();

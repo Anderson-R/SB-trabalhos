@@ -10,7 +10,7 @@ int main(){
     vector<string> vec;
     //-split-test 1
     vec.push_back("string qualquer");
-    if(vec != split("string qualquer", ':') )
+    if(vec != splitPUm("string qualquer", ':') )
         cout<<"\33[1;31m Split-Test 1 FAILED"<<endl;
     else
         cout<<"\33[1;32m Split-Test 1 SUCCEEDED"<<endl;
@@ -19,7 +19,7 @@ int main(){
     //-Split-test 2
     vec.push_back("string ");
     vec.push_back(" qualquer");
-    if(vec != split("string : qualquer", ':') )
+    if(vec != splitPUm("string : qualquer", ':') )
         cout<<"\33[1;31m Split-Test 2 FAILED"<<endl;
     else
         cout<<"\33[1;32m Split-Test 2 SUCCEEDED"<<endl;
@@ -27,7 +27,7 @@ int main(){
 
     //-Split-test 3
     vec.push_back("");
-    if(vec != split("", ':') )
+    if(vec != splitPUm("", ':') )
         cout<<"\33[1;31m Split-Test 3 FAILED"<<endl;
     else
         cout<<"\33[1;32m Split-Test 3 SUCCEEDED"<<endl;
@@ -219,8 +219,18 @@ int main(){
     for (it2=data.begin(); it2!=data.end(); ++it2)
         std::cout << it2->first << " => " << it2->second << '\n';
 
-    string stoiStr = {"5"};
+    string stoiStr = {"5a"};
     cout<<std::stoi(stoiStr)<<endl;
+
+    std::string::iterator it5 = stoiStr.begin();
+    while (it5 != stoiStr.end() && std::isdigit(*it5)) ++it5;
+    cout<< (!stoiStr.empty() && it5 == stoiStr.end())<<endl;
+
+    std::string white = "asd asda asd ";
+    trimWhiteSpace(white);
+    cout<<white<<endl;
+
+    
 
     return 0;
 }
