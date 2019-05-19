@@ -1,3 +1,5 @@
+#ifndef PASSAGEMZERO_HPP
+#define PASSAGEMZERO_HPP
 #include <iostream>
 #include <fstream>
 #include <vector>
@@ -155,3 +157,5 @@ int passagemZero(std::ifstream& main_reader, std::fstream& preWriter, std::map<s
 	return 0;
 
 }
+
+#endif
