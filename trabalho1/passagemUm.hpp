@@ -121,14 +121,18 @@ bool verifyDir(string dir){
 }
 
 int constDir(int posCounter, string line){
-    int pos = line.find("CONST");
-    if(line.length() == (pos+5)) return -1;
-    int value = stoi(line.substr(pos+6, 100));
+    string capLine = strCapitalize(line);
+    int pos = capLine.find("CONST");
+    if(capLine.length() == (pos+5)) return -1;
+    int value = stoi(capLine.substr(pos+6, 100));
     data.insert(pair<int, int>(posCounter, value));
+    if(simbolTable.find(line.substr(0,pos-2)) != simbolTable.end())
+        simbolTable.find(line.substr(0,pos-2))->second = value;
     return 1;
 }
 
 int spaceDir(int posCounter, string line){
+    string capLine = strCapitalize(line);
     int pos = line.find("SPACE");
     string rot;
     containRot(line, &rot);
@@ -206,6 +210,13 @@ map<string, int> passagemUm(map<string, int> pre, vector<string> program){
 
         lineCounter++;
     }
+
+    std::map<int, int>::iterator it = data.begin();
+    cout<<"=============="<<endl;
+	for(; it != data.end(); it++)
+		cout<<it->first<<" "<<it->second<<endl;
+	cout<<"=============="<<endl;
+
     return simbolTable;
 }
 
