@@ -84,13 +84,14 @@ int labelValue(string label){
 string getInst(string line){
     string inst;
     string rot;
-    int ctnRot = containRot(line, &rot);
+    string lineCopy = line.substr(0, 100);
+    int ctnRot = containRot(lineCopy, &rot);
     if(ctnRot == 1)
-        inst = splitPUm(line, ' ')[0];
+        inst = splitPUm(lineCopy, ' ')[0];
     else if(ctnRot == 0){
-        line.erase(0, rot.size()+1);
-        if(line.at(0) == ' ') line.erase(0, 1);
-        inst = splitPUm(line, ' ')[0];
+        lineCopy.erase(0, rot.size()+1);
+        if(lineCopy.at(0) == ' ') lineCopy.erase(0, 1);
+        inst = splitPUm(lineCopy, ' ')[0];
     }
     locale loc;
     for(int i=0; i< inst.length(); i++){
@@ -128,13 +129,17 @@ int constDir(int posCounter, string line){
 
 int spaceDir(int posCounter, string line){
     int pos = line.find("SPACE");
+    string rot;
+    containRot(line, &rot);
     if(line.length() == (pos+5)){
         data.insert(pair<int, int>(posCounter, 0));
+        validateLabel(rot, posCounter);
         return 1;
     }
     int value = stoi(line.substr(pos+6, 100));
     for(int i=0; i<value; i++)
         data.insert(pair<int, int>(posCounter+i, 0));
+    validateLabel(rot, posCounter);
     return value;
 }
 
@@ -167,33 +172,33 @@ map<string, int> passagemUm(map<string, int> pre, vector<string> program){
             //rotulo
             if(containRot(line, &label) == 0){
                 if(validateLabel(label, posCounter) == 1)
-                    cout<< "\33[1;31m"<< "ERRO semantico na linha: "<< pre.at(line)<< "\033[0m"<< endl;
+                    cout<< "\33[1;31m"<< "ERRO semantico na linha do aqruivo fonte do aqruivo fonte: "<< pre.at(line)<< " e linha do aquivo pre processado: " << lineCounter << "\033[0m"<< endl;
             };
             label.erase();
 
             //instrução e diretiva
             string inst = getInst(line);
             if(!verifyInst(inst) && !verifyDir(inst)){
-                cout<< "\33[1;31m"<< "ERRO sintatico/lexico na linha: "<< pre.at(line)<< "\033[0m"<< endl;
+                cout<< "\33[1;31m"<< "ERRO sintatico na linha do aqruivo fonte: "<< pre.at(line)<< " e linha do aquivo pre processado: " << lineCounter << "\033[0m"<< endl;
             }
             else{
                 if(inst == "COPY" && inText) posCounter += 3;
                 else if(inst == "COPY" && inData)
-                    cout<< "\33[1;31m"<< "ERRO semantico na linha: "<< pre.at(line)<< "\033[0m"<< endl;
+                    cout<< "\33[1;31m"<< "ERRO semantico na linha do aqruivo fonte: "<< pre.at(line)<< " e linha do aquivo pre processado: " << lineCounter << "\033[0m"<< endl;
                 else if(inst == "STOP" && inText) posCounter++;
                 else if(inst == "STOP" && inData)
-                    cout<< "\33[1;31m"<< "ERRO semantico na linha: "<< pre.at(line)<< "\033[0m"<< endl;
+                    cout<< "\33[1;31m"<< "ERRO semantico na linha do aqruivo fonte: "<< pre.at(line)<< " e linha do aquivo pre processado" << lineCounter << "\033[0m"<< endl;
                 else if(inst == "CONST" && inData) {
                     if(constDir(posCounter, line) == -1)
-                        cout<< "\33[1;31m"<< "ERRO sintatico na linha: "<< pre.at(line)<< "\033[0m"<< endl;
+                        cout<< "\33[1;31m"<< "ERRO sintatico na linha do aqruivo fonte: "<< pre.at(line)<< " e linha do aquivo pre processado: " << lineCounter << "\033[0m"<< endl;
                     else
                         posCounter++;
                 }
                 else if(inst == "CONST" && inText)
-                    cout<< "\33[1;31m"<< "ERRO semantico na linha: "<< pre.at(line)<< "\033[0m"<< endl;
+                    cout<< "\33[1;31m"<< "ERRO semantico na linha do aqruivo fonte: "<< pre.at(line)<< " e linha do aquivo pre processado: " << lineCounter << "\033[0m"<< endl;
                 else if(inst == "SPACE" && inData) posCounter += spaceDir(posCounter, line);
                 else if(inst == "SPACE" && inText)
-                    cout<< "\33[1;31m"<< "ERRO semantico na linha: "<< pre.at(line)<< "\033[0m"<< endl;
+                    cout<< "\33[1;31m"<< "ERRO semantico na linha do aqruivo fonte: "<< pre.at(line)<< " e linha do aquivo pre processado: " << lineCounter << "\033[0m"<< endl;
                 else if(inText) posCounter += 2;
             }
         }

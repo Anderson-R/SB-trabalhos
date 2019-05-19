@@ -3,6 +3,7 @@
 #include "../passagemDois.hpp"
 #include <vector>
 #include <string>
+#include <fstream>
 
 using namespace std;
 
@@ -229,6 +230,10 @@ int main(){
     std::string white = "asd asda asd ";
     trimWhiteSpace(white);
     cout<<white<<endl;
+
+    ofstream f;
+    f.open("teste.txt", std::ofstream::out | std::ofstream::trunc);
+    f<<6;
 
     
 

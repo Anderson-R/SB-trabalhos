@@ -1,6 +1,7 @@
 #include <iostream>
 #include <vector>
 #include <string>
+#include <fstream>
 #include "passagemUm.hpp"
 
 //returns number of operands, if wrong number of operands for the instruction in line return -1
@@ -44,7 +45,6 @@ bool getOperand(std::string op, int* ret){
             std::map<std::string, int>::iterator it = simbolTable.find(sum.at(0));
             if(it != simbolTable.end()) {
                 *ret = it->second;
-                std::cout<<it->first<<"=>"<<it->second<<endl;
                 return true;
             }
         }
@@ -59,14 +59,16 @@ bool getOperand(std::string op, int* ret){
     return false;
 }
 
-std::vector<int> getOperands(std::string line, uint8_t nOperands){
+std::vector<int> getOperands(std::string line){
     std::vector<int> ret;
     std::string inst = getInst(line);
     int instSize = inst.size();
     size_t pos = line.find(inst);
     std::string operand = line.substr(pos+instSize);
+    trimWhiteSpace(operand);
+    int nOperands = splitPUm(operand, ',').size();
     if(nOperands == 1){
-        int op;
+        int op=-1;
         if(getOperand(operand, &op)) ret.push_back(op);
         return ret;
     }
@@ -80,15 +82,37 @@ std::vector<int> getOperands(std::string line, uint8_t nOperands){
         return ret;
 
     }
+    return ret;
 }
 
-bool operands(string line){
-    string inst = getInst(line);
-    if(!verifyInst(inst)) return false;
-    uint8_t nOperands = verifyOperands(line);
-    if(nOperands == -1) return false;
+
+void passagemDois(std::map<std::string, int> preFile, std::vector<std::string> program, std::string fileName){
+    std::string line;
+    std::ofstream obj;
+    obj.open(fileName, std::fstream::out | std::fstream::trunc);
+    for(int i=0; i<program.size(); i++){
+        line = program.at(i);
+        if(line == "SECTION TEXT" || line == "SECTION DATA"){
+            i++;
+            line = program.at(i);
+        }
+        std::string inst = getInst(line);
+        if(verifyInst(inst)){
+            std::vector<int> op;
+            int opCode = INSTRUCTIONS.at(inst);
+            if(opCode != 14){
+                op = getOperands(line);
+                if(op.size() == 1) obj << opCode << " " << op.at(0) << " ";  
+                else if(op.size() == 2 && opCode == 9) obj << opCode << " " << op.at(0) << " " << op.at(1) << " ";
+                else cout<< "\33[1;31m"<< "ERRO lexico na linha do arquivo fonte: "<< preFile.at(line)<< " e linha do arquivo pre processado: "<< i+1 <<"\033[0m" << endl;
+            }
+            else obj << opCode << " ";
+            op.clear();
+        }
+    }
 
 
+    obj.close();
 }
 
 

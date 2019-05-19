@@ -93,6 +93,7 @@ int passagemZero(std::ifstream& main_reader, std::fstream& preWriter, std::map<s
 				case 0:
 					if(strCapitalize(rawLine) == "SECTION TEXT"){
 						preWriter<< "SECTION TEXT"<<std::endl;
+						lines.push_back(origLineNum);
 						machineState = 1;
 					}
 					else if(strCapitalize(tokens[1]) == "EQU"){
