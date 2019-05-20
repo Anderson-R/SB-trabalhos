@@ -124,7 +124,7 @@ int constDir(int posCounter, string line){
     string capLine = strCapitalize(line);
     int pos = capLine.find("CONST");
     if(capLine.length() == (pos+5)) return -1;
-    int value = stoi(capLine.substr(pos+6, 100));
+    int value = stoi(capLine.substr(pos+6, 100), NULL, 0);
     data.insert(pair<int, int>(posCounter, value));
     //if(simbolTable.find(line.substr(0,pos-2)) != simbolTable.end())
         //simbolTable.find(line.substr(0,pos-2))->second = value;
