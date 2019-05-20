@@ -75,12 +75,16 @@ int passagemZero(std::ifstream& main_reader, std::fstream& preWriter, std::map<s
 
 	bool newLine = true;
 	bool EQUfound; // Flag for EQU directive
+	bool MACROfound; // Flag for MACRO directive
 	std::string token;
+	std::string macrodef; // For constructing MACROs
 	std::vector<std::string> tokens;
 	std::vector<std::string> EQUtable;
+	std::vector<std::string> MACROtable;
 	std::string rawLine;
 	int origLineNum = 1; // Line number in the original .asm file
 	int iEQU; // For indexing the EQUATE table
+	int iMACRO; // For indexing the MACRO table
 	int machineState = 0; // FSM which controls the translator. 0 - pre-SECTION TEXT, 1 - post-SECTION TEXT, 2 - IF directive, 3 - MACRO definition
 
 	// Iterate through the lines in the .asm code for pre-processing
@@ -102,7 +106,7 @@ int passagemZero(std::ifstream& main_reader, std::fstream& preWriter, std::map<s
 						EQUtable.push_back(tokens.back());
 					}
 					else{
-						std::cout << "Error! Code outside of text section in line no. " << origLineNum << std::endl;
+						std::cout << "Semantic error! Code outside of text section in line no. " << origLineNum << std::endl;
 						return 0;
 					}
 					break;
@@ -118,6 +122,22 @@ int passagemZero(std::ifstream& main_reader, std::fstream& preWriter, std::map<s
 							}
 						}
 						break;
+					}
+
+					if(tokens.size() > 1){
+						if(strCapitalize(tokens[1]) == "MACRO"){
+							machineState = 3;
+							if(tokens[0].back() == ':')
+								tokens[0].pop_back();
+							else{
+								std::cout << "Syntactic error! Expecting ':' after label in line no. " << origLineNum << std::endl;
+								return 0;
+							}
+							MACROtable.push_back(tokens[0]);
+							iMACRO = MACROtable.size();
+							//parameters
+							break;
+						}
 					}
 
 					// Iterate through individual tokens in the .asm code
@@ -144,13 +164,23 @@ int passagemZero(std::ifstream& main_reader, std::fstream& preWriter, std::map<s
 								}
 							}
 
+							MACROfound = false;
+							for(iMACRO = 0; iMACRO < MACROtable.size(); iMACRO += 2){
+								if(*it == MACROtable[iMACRO]){
+									MACROfound = true;
+									break;
+								}
+							}
+
 							if(EQUfound == true)
 								preWriter << EQUtable[iEQU+1];
+							else if(MACROfound == true)
+								preWriter << MACROtable[iMACRO+1];
 							else
 								preWriter << *it;
 						}
 					}
-					if(newLine == false)
+					if(newLine == false && MACROfound == false)
 						preWriter << std::endl;
 					break;
 
@@ -190,6 +220,35 @@ int passagemZero(std::ifstream& main_reader, std::fstream& preWriter, std::map<s
 					else
 						EQUfound = false;
 					machineState = 1;
+					break;
+				case 3:
+					if(strCapitalize(tokens[0]) == "END"){
+						MACROtable.push_back(macrodef);
+						macrodef.clear();
+						machineState = 1;
+						break;
+					}
+
+					MACROfound = false;
+					for(iMACRO = 0; iMACRO < MACROtable.size(); iMACRO += 2){
+						if(tokens[0] == MACROtable[iMACRO]){
+							MACROfound = true;
+							break;
+						}
+					}
+					if(MACROfound)
+						macrodef.append(MACROtable[iMACRO+1]);
+					else{
+						for(std::vector<std::string>::iterator it = tokens.begin(); it != tokens.end(); it++){
+							if(newLine == true)
+								newLine = false;
+							else
+								macrodef.push_back(' ');
+							macrodef.append(*it);
+						}
+						if(newLine == false)
+							macrodef.push_back('\n');
+					}
 					break;
 				default:
 					break;
