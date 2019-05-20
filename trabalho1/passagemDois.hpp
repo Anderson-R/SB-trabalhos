@@ -99,12 +99,12 @@ void passagemDois(std::map<std::string, int> preFile, std::vector<std::string> p
         std::string inst = getInst(line);
         if(verifyInst(inst)){
             std::vector<int> op;
-            int opCode = INSTRUCTIONS.at(inst);
+            int opCode = INSTRUCTIONS.at(strCapitalize(inst));
             if(opCode != 14){
-                op = getOperands(line);
+                op = getOperands(strCapitalize(line));
                 if(op.size() == 1) obj << opCode << " " << op.at(0) << " ";  
                 else if(op.size() == 2 && opCode == 9) obj << opCode << " " << op.at(0) << " " << op.at(1) << " ";
-                else cout<< "\33[1;31m"<< "ERRO lexico na linha do arquivo fonte: "<< preFile.at(line)<< " e linha do arquivo pre processado: "<< i+1 <<"\033[0m" << endl;
+                else cout<< "\33[1;31m"<< "ERRO7 lexico na linha do arquivo fonte: "<< preFile.at(line)<< " e linha do arquivo pre processado: "<< i+1 <<"\033[0m" << endl;
             }
             else obj << opCode << " ";
             op.clear();

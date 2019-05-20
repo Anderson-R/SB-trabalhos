@@ -6,6 +6,7 @@
 #include <vector>
 #include <locale>
 #include <map>
+#include "passagemZero.hpp"
 
 using namespace std;
 
@@ -107,7 +108,7 @@ bool verifyInst(string inst){
         inst[i] = toupper(inst[i], loc);
     }
     map<string,int>::iterator it;
-    it = INSTRUCTIONS.find(inst);
+    it = INSTRUCTIONS.find(strCapitalize(inst));
 
     return it != INSTRUCTIONS.end();
 }
@@ -120,15 +121,20 @@ bool verifyDir(string dir){
 }
 
 int constDir(int posCounter, string line){
-    int pos = line.find("CONST");
-    if(line.length() == (pos+5)) return -1;
-    int value = stoi(line.substr(pos+6, 100));
+    string capLine = strCapitalize(line);
+    int pos = capLine.find("CONST");
+    if(capLine.length() == (pos+5)) return -1;
+    int value = stoi(capLine.substr(pos+6, 100));
     data.insert(pair<int, int>(posCounter, value));
+    if(simbolTable.find(line.substr(0,pos-2)) != simbolTable.end())
+        simbolTable.find(line.substr(0,pos-2))->second = value;
     return 1;
 }
 
 int spaceDir(int posCounter, string line){
+    string capLine = strCapitalize(line);
     int pos = line.find("SPACE");
+    if(pos == string::npos) pos = line.find("space");
     string rot;
     containRot(line, &rot);
     if(line.length() == (pos+5)){
@@ -152,14 +158,14 @@ map<string, int> passagemUm(map<string, int> pre, vector<string> program){
     for(int i=0; i<program.size(); i++){
         line = program.at(i);
         //section
-        if(line == "SECTION TEXT") {
+        if(strCapitalize(line) == "SECTION TEXT") {
             inText = true;
             inData = false;
             i++;
             line = program.at(i);
             lineCounter++;
         }
-        else if(line == "SECTION DATA"){
+        else if(strCapitalize(line) == "SECTION DATA"){
             inText = false;
             inData = true;
             i++;
@@ -172,39 +178,46 @@ map<string, int> passagemUm(map<string, int> pre, vector<string> program){
             //rotulo
             if(containRot(line, &label) == 0){
                 if(validateLabel(label, posCounter) == 1)
-                    cout<< "\33[1;31m"<< "ERRO semantico na linha do aqruivo fonte do aqruivo fonte: "<< pre.at(line)<< " e linha do aquivo pre processado: " << lineCounter << "\033[0m"<< endl;
+                    cout<< "\33[1;31m"<< "ERRO0 semantico na linha do aqruivo fonte do aqruivo fonte: "<< pre.at(line)<< " e linha do aquivo pre processado: " << lineCounter << "\033[0m"<< endl;
             };
             label.erase();
 
             //instrução e diretiva
             string inst = getInst(line);
             if(!verifyInst(inst) && !verifyDir(inst)){
-                cout<< "\33[1;31m"<< "ERRO sintatico na linha do aqruivo fonte: "<< pre.at(line)<< " e linha do aquivo pre processado: " << lineCounter << "\033[0m"<< endl;
+                cout<< "\33[1;31m"<< "ERRO1 sintatico na linha do aqruivo fonte: "<< pre.at(line)<< " e linha do aquivo pre processado: " << lineCounter << "\033[0m"<< endl;
             }
             else{
-                if(inst == "COPY" && inText) posCounter += 3;
-                else if(inst == "COPY" && inData)
-                    cout<< "\33[1;31m"<< "ERRO semantico na linha do aqruivo fonte: "<< pre.at(line)<< " e linha do aquivo pre processado: " << lineCounter << "\033[0m"<< endl;
-                else if(inst == "STOP" && inText) posCounter++;
-                else if(inst == "STOP" && inData)
-                    cout<< "\33[1;31m"<< "ERRO semantico na linha do aqruivo fonte: "<< pre.at(line)<< " e linha do aquivo pre processado" << lineCounter << "\033[0m"<< endl;
-                else if(inst == "CONST" && inData) {
+                if(strCapitalize(inst) == "COPY" && inText) posCounter += 3;
+                else if(strCapitalize(inst) == "COPY" && inData)
+                    cout<< "\33[1;31m"<< "ERRO2 semantico na linha do aqruivo fonte: "<< pre.at(line)<< " e linha do aquivo pre processado: " << lineCounter << "\033[0m"<< endl;
+                else if(strCapitalize(inst) == "STOP" && inText) posCounter++;
+                else if(strCapitalize(inst) == "STOP" && inData)
+                    cout<< "\33[1;31m"<< "ERRO3 semantico na linha do aqruivo fonte: "<< pre.at(line)<< " e linha do aquivo pre processado" << lineCounter << "\033[0m"<< endl;
+                else if(strCapitalize(inst) == "CONST" && inData) {
                     if(constDir(posCounter, line) == -1)
-                        cout<< "\33[1;31m"<< "ERRO sintatico na linha do aqruivo fonte: "<< pre.at(line)<< " e linha do aquivo pre processado: " << lineCounter << "\033[0m"<< endl;
+                        cout<< "\33[1;31m"<< "ERRO4 sintatico na linha do aqruivo fonte: "<< pre.at(line)<< " e linha do aquivo pre processado: " << lineCounter << "\033[0m"<< endl;
                     else
                         posCounter++;
                 }
-                else if(inst == "CONST" && inText)
-                    cout<< "\33[1;31m"<< "ERRO semantico na linha do aqruivo fonte: "<< pre.at(line)<< " e linha do aquivo pre processado: " << lineCounter << "\033[0m"<< endl;
-                else if(inst == "SPACE" && inData) posCounter += spaceDir(posCounter, line);
-                else if(inst == "SPACE" && inText)
-                    cout<< "\33[1;31m"<< "ERRO semantico na linha do aqruivo fonte: "<< pre.at(line)<< " e linha do aquivo pre processado: " << lineCounter << "\033[0m"<< endl;
+                else if(strCapitalize(inst) == "CONST" && inText)
+                    cout<< "\33[1;31m"<< "ERRO5 semantico na linha do aqruivo fonte: "<< pre.at(line)<< " e linha do aquivo pre processado: " << lineCounter << "\033[0m"<< endl;
+                else if(strCapitalize(inst) == "SPACE" && inData) posCounter += spaceDir(posCounter, line);
+                else if(strCapitalize(inst) == "SPACE" && inText)
+                    cout<< "\33[1;31m"<< "ERRO6 semantico na linha do aqruivo fonte: "<< pre.at(line)<< " e linha do aquivo pre processado: " << lineCounter << "\033[0m"<< endl;
                 else if(inText) posCounter += 2;
             }
         }
 
         lineCounter++;
     }
+
+    std::map<int, int>::iterator it = data.begin();
+    cout<<"=============="<<endl;
+	for(; it != data.end(); it++)
+		cout<<it->first<<" "<<it->second<<endl;
+	cout<<"=============="<<endl;
+
     return simbolTable;
 }
 
