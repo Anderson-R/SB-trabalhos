@@ -86,7 +86,7 @@ int passagemZero(std::ifstream& main_reader, std::fstream& preWriter, std::map<s
 	// Iterate through the lines in the .asm code for pre-processing
 	while(std::getline(main_reader, rawLine)){
 		if(strNotBlank(rawLine)){
-
+			newLine = true;
 			tokens = intoTokens(rawLine);
 
 			switch(machineState){
@@ -108,8 +108,6 @@ int passagemZero(std::ifstream& main_reader, std::fstream& preWriter, std::map<s
 					break;
 
 				case 1:
-					newLine = true;
-
 					if(strCapitalize(tokens[0]) == "IF"){
 						machineState = 2;
 						EQUfound = false;
@@ -144,7 +142,6 @@ int passagemZero(std::ifstream& main_reader, std::fstream& preWriter, std::map<s
 									EQUfound = true;
 									break;
 								}
-								iEQU++;
 							}
 
 							if(EQUfound == true)
@@ -179,7 +176,6 @@ int passagemZero(std::ifstream& main_reader, std::fstream& preWriter, std::map<s
 										EQUfound = true;
 										break;
 									}
-									iEQU++;
 								}
 
 								if(EQUfound == true)
