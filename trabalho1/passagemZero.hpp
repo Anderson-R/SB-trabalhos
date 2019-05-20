@@ -198,6 +198,7 @@ int passagemZero(std::ifstream& main_reader, std::fstream& preWriter, std::map<s
 
 								// Place spaces inbetween tokens
 								if(newLine == true){
+									lines.push_back(origLineNum);
 									newLine = false;
 								}
 								else
@@ -243,14 +244,17 @@ int passagemZero(std::ifstream& main_reader, std::fstream& preWriter, std::map<s
 						macrodef.append(MACROtable[iMACRO+1]);
 					else{
 						for(std::vector<std::string>::iterator it = tokens.begin(); it != tokens.end(); it++){
-							if(newLine == true)
+							if(newLine == true){
 								newLine = false;
+								lines.push_back(origLineNum);
+							}
 							else
 								macrodef.push_back(' ');
 							macrodef.append(*it);
 						}
-						if(newLine == false)
+						if(newLine == false){
 							macrodef.push_back('\n');
+						}
 					}
 					break;
 				default:

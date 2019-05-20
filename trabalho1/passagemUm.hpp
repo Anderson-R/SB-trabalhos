@@ -174,7 +174,7 @@ map<string, int> passagemUm(map<string, int> pre, vector<string> program){
         }
         
 
-        if(inText || inData){
+        if((inText || inData) && (line != "")){
             //rotulo
             if(containRot(line, &label) == 0){
                 if(validateLabel(label, posCounter) == 1)
