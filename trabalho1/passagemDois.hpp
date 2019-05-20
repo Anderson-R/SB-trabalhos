@@ -47,6 +47,7 @@ bool getOperand(std::string op, int* ret){
                 *ret = it->second;
                 return true;
             }
+            else throw 1;
         }
     }
     if(sum.size() == 2){
@@ -66,6 +67,7 @@ std::vector<int> getOperands(std::string line){
     size_t pos = line.find(inst);
     std::string operand = line.substr(pos+instSize);
     trimWhiteSpace(operand);
+    if(operand.size() == 0) throw 2;
     int nOperands = splitPUm(operand, ',').size();
     if(nOperands == 1){
         int op=-1;
@@ -101,13 +103,25 @@ void passagemDois(std::map<std::string, int> preFile, std::vector<std::string> p
             std::vector<int> op;
             int opCode = INSTRUCTIONS.at(strCapitalize(inst));
             if(opCode != 14){
-                op = getOperands(strCapitalize(line));
+                try{
+                    op = getOperands(strCapitalize(line));
+                }catch(int e){
+                    if(e == 1) 
+                        cout<< "\33[1;31m"<< "ERRO8 semantico na linha do arquivo fonte: "<< preFile.at(line)<< " e linha do arquivo pre processado: "<< i+1 <<"\033[0m" << endl;
+                    else if(e == 2)
+                        cout<< "\33[1;31m"<< "ERRO9 lexico na linha do arquivo fonte: "<< preFile.at(line)<< " e linha do arquivo pre processado: "<< i+1 <<"\033[0m" << endl;
+                };
                 if(op.size() == 1) obj << opCode << " " << op.at(0) << " ";  
                 else if(op.size() == 2 && opCode == 9) obj << opCode << " " << op.at(0) << " " << op.at(1) << " ";
-                else cout<< "\33[1;31m"<< "ERRO7 lexico na linha do arquivo fonte: "<< preFile.at(line)<< " e linha do arquivo pre processado: "<< i+1 <<"\033[0m" << endl;
+                //else cout<< "\33[1;31m"<< "ERRO7 lexico na linha do arquivo fonte: "<< preFile.at(line)<< " e linha do arquivo pre processado: "<< i+1 <<"\033[0m" << endl;
             }
             else obj << opCode << " ";
             op.clear();
+        }
+        else if(verifyDir(strCapitalize(inst))){
+            string rot;  
+            containRot(line, &rot);
+            obj << data.at(simbolTable.at(rot)) << " ";
         }
     }
 

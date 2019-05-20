@@ -126,8 +126,8 @@ int constDir(int posCounter, string line){
     if(capLine.length() == (pos+5)) return -1;
     int value = stoi(capLine.substr(pos+6, 100));
     data.insert(pair<int, int>(posCounter, value));
-    if(simbolTable.find(line.substr(0,pos-2)) != simbolTable.end())
-        simbolTable.find(line.substr(0,pos-2))->second = value;
+    //if(simbolTable.find(line.substr(0,pos-2)) != simbolTable.end())
+        //simbolTable.find(line.substr(0,pos-2))->second = value;
     return 1;
 }
 
@@ -178,7 +178,7 @@ map<string, int> passagemUm(map<string, int> pre, vector<string> program){
             //rotulo
             if(containRot(line, &label) == 0){
                 if(validateLabel(label, posCounter) == 1)
-                    cout<< "\33[1;31m"<< "ERRO0 semantico na linha do aqruivo fonte do aqruivo fonte: "<< pre.at(line)<< " e linha do aquivo pre processado: " << lineCounter << "\033[0m"<< endl;
+                    cout<< "\33[1;31m"<< "ERRO0 semantico na linha do aqruivo fonte: "<< pre.at(line)<< " e linha do aquivo pre processado: " << lineCounter << "\033[0m"<< endl;
             };
             label.erase();
 
