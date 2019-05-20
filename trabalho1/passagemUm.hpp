@@ -134,6 +134,7 @@ int constDir(int posCounter, string line){
 int spaceDir(int posCounter, string line){
     string capLine = strCapitalize(line);
     int pos = line.find("SPACE");
+    if(pos == string::npos) pos = line.find("space");
     string rot;
     containRot(line, &rot);
     if(line.length() == (pos+5)){
