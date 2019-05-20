@@ -1,3 +1,5 @@
+#ifndef PASSAGEMDOIS_HPP
+#define PASSAGEMDOIS_HPP
 #include <iostream>
 #include <vector>
 #include <string>
@@ -130,3 +132,4 @@ void passagemDois(std::map<std::string, int> preFile, std::vector<std::string> p
 }
 
 
+#endif
