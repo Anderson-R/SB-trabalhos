@@ -1,5 +1,3 @@
-#ifndef PASSAGEMZERO_HPP
-#define PASSAGEMZERO_HPP
 #include <iostream>
 #include <fstream>
 #include <vector>
@@ -83,12 +81,12 @@ int passagemZero(std::ifstream& main_reader, std::fstream& preWriter, std::map<s
 	std::string rawLine;
 	int origLineNum = 1; // Line number in the original .asm file
 	int iEQU; // For indexing the EQUATE table
-	int machineState = 0; // FSM which controls the 
+	int machineState = 0; // FSM which controls the translator. 0 - pre-SECTION TEXT, 1 - post-SECTION TEXT, 2 - IF directive, 3 - MACRO definition
 
 	// Iterate through the lines in the .asm code for pre-processing
 	while(std::getline(main_reader, rawLine)){
 		if(strNotBlank(rawLine)){
-
+			newLine = true;
 			tokens = intoTokens(rawLine);
 
 			switch(machineState){
@@ -110,7 +108,18 @@ int passagemZero(std::ifstream& main_reader, std::fstream& preWriter, std::map<s
 					break;
 
 				case 1:
-					newLine = true;
+					if(strCapitalize(tokens[0]) == "IF"){
+						machineState = 2;
+						EQUfound = false;
+						for(iEQU = 0; iEQU < EQUtable.size(); iEQU += 2){
+							if(tokens[1] == EQUtable[iEQU]){
+								EQUfound = true;
+								break;
+							}
+						}
+						break;
+					}
+
 					// Iterate through individual tokens in the .asm code
 					for(std::vector<std::string>::iterator it = tokens.begin(); it != tokens.end(); it++){
 						if(strNotBlank(*it)){
@@ -119,9 +128,8 @@ int passagemZero(std::ifstream& main_reader, std::fstream& preWriter, std::map<s
 							if(it->front() == ';')
 								break;
 
-							// Place spaces between tokens and enumerates lines according to .asm
+							// Place spaces between tokens
 							if(newLine == true){
-								//preWriter << origLineNum << ' ';
 								lines.push_back(origLineNum);
 								newLine = false;
 							}
@@ -134,7 +142,6 @@ int passagemZero(std::ifstream& main_reader, std::fstream& preWriter, std::map<s
 									EQUfound = true;
 									break;
 								}
-								iEQU++;
 							}
 
 							if(EQUfound == true)
@@ -145,6 +152,44 @@ int passagemZero(std::ifstream& main_reader, std::fstream& preWriter, std::map<s
 					}
 					if(newLine == false)
 						preWriter << std::endl;
+					break;
+
+				case 2:
+					if(EQUfound == true){
+						for(std::vector<std::string>::iterator it = tokens.begin(); it != tokens.end(); it++){
+							if(strNotBlank(*it)){
+
+								// Ignore comments
+								if(it->front() == ';')
+									break;
+
+								// Place spaces inbetween tokens
+								if(newLine == true){
+									newLine = false;
+								}
+								else
+									preWriter << ' ';
+
+								EQUfound = false;
+								for(iEQU = 0; iEQU < EQUtable.size(); iEQU += 2){
+									if(*it == EQUtable[iEQU]){
+										EQUfound = true;
+										break;
+									}
+								}
+
+								if(EQUfound == true)
+									preWriter << EQUtable[iEQU+1];
+								else
+									preWriter << *it;
+							}
+						}
+						if(newLine == false)
+							preWriter << std::endl;
+					}
+					else
+						EQUfound = false;
+					machineState = 1;
 					break;
 				default:
 					break;
@@ -157,5 +202,3 @@ int passagemZero(std::ifstream& main_reader, std::fstream& preWriter, std::map<s
 	return 0;
 
 }
-
-#endif
