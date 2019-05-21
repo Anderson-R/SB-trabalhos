@@ -65,6 +65,7 @@ bool getOperand(std::string op, int* ret){
 std::vector<int> getOperands(std::string line){
     std::vector<int> ret;
     std::string inst = getInst(line);
+    bool jmp = (strCapitalize(inst) == "JMP") || (strCapitalize(inst) == "JMPP") || (strCapitalize(inst) == "JMPN") || (strCapitalize(inst) == "JMPZ");
     int instSize = inst.size();
     size_t pos = line.find(inst);
     std::string operand = line.substr(pos+instSize);
@@ -74,6 +75,11 @@ std::vector<int> getOperands(std::string line){
     if(nOperands == 1){
         int op=-1;
         if(getOperand(operand, &op)) ret.push_back(op);
+        if(jmp){
+            std::map<int, int>::iterator it = data.begin();
+            for(; it != data.end(); it++)
+                if(it->first == op) throw 1;
+        }
         return ret;
     }
     else if(nOperands == 2){
@@ -93,6 +99,7 @@ std::vector<int> getOperands(std::string line){
 void passagemDois(std::map<std::string, int> preFile, std::vector<std::string> program, std::string fileName){
     std::string line;
     std::ofstream obj;
+    int dataPos;
     obj.open(fileName, std::fstream::out | std::fstream::trunc);
     for(int i=0; i<program.size(); i++){
         line = program.at(i);
