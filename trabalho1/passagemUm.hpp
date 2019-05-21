@@ -197,7 +197,7 @@ map<string, int> passagemUm(map<string, int> pre, vector<string> program){
             }
             
             if(!verifyInst(inst) && !verifyDir(inst)){
-                cout<< "\33[1;31m"<< "ERRO1 sintatico na linha do aqruivo fonte: "<< pre.at(line)<< " e linha do aquivo pre processado: " << lineCounter << "\033[0m"<< endl;
+                cout<< "\33[1;31m"<< "ERRO1 lexico na linha do aqruivo fonte: "<< pre.at(line)<< " e linha do aquivo pre processado: " << lineCounter << "\033[0m"<< endl;
             }
             else{
                 if(strCapitalize(inst) == "COPY" && inText) posCounter += 3;

@@ -70,7 +70,7 @@ std::vector<int> getOperands(std::string line){
     size_t pos = line.find(inst);
     std::string operand = line.substr(pos+instSize);
     trimWhiteSpace(operand);
-    if(operand.size() == 0) throw 2;
+    if(operand.size() == 0) throw 3;
     int nOperands = splitPUm(operand, ',').size();
     if(nOperands == 1){
         int op=-1;
@@ -83,7 +83,7 @@ std::vector<int> getOperands(std::string line){
         return ret;
     }
     else if(nOperands == 2){
-        if(strCapitalize(inst) != "COPY") throw 2;
+        if(strCapitalize(inst) != "COPY") throw 3;
         std::vector<std::string> ops = splitPUm(operand, ',');
         int op1, op2;
         if(getOperand(ops.at(0), &op1) && getOperand(ops.at(1), &op2)){
@@ -93,7 +93,7 @@ std::vector<int> getOperands(std::string line){
         return ret;
 
     }
-    else throw 2;
+    else throw 3;
     return ret;
 }
 
@@ -130,6 +130,8 @@ void passagemDois(std::map<std::string, int> preFile, std::vector<std::string> p
                         cout<< "\33[1;31m"<< "ERRO8 semantico na linha do arquivo fonte: "<< preFile.at(line)<< " e linha do arquivo pre processado: "<< i+1 <<"\033[0m" << endl;
                     else if(e == 2)
                         cout<< "\33[1;31m"<< "ERRO9 lexico na linha do arquivo fonte: "<< preFile.at(line)<< " e linha do arquivo pre processado: "<< i+1 <<"\033[0m" << endl;
+                    else if(e == 3)
+                        cout<< "\33[1;31m"<< "ERRO10 sintatico na linha do arquivo fonte: "<< preFile.at(line)<< " e linha do arquivo pre processado: "<< i+1 <<"\033[0m" << endl;
                 };
                 if(op.size() == 1) obj << opCode << " " << op.at(0) << " ";  
                 else if(op.size() == 2 && opCode == 9) obj << opCode << " " << op.at(0) << " " << op.at(1) << " ";
