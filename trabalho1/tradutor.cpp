@@ -33,10 +33,6 @@ int main(int argc, char** argv){
     passagemZero(main_reader, preWriter, preFile, program);
 	std::map<std::string, int> st = passagemUm(preFile, program);
 	std::map<std::string, int>::iterator it = st.begin();
-	cout<<"=============="<<endl;
-	for(; it != st.end(); it++)
-		cout<<it->first<<" "<<it->second<<endl;
-	cout<<"=============="<<endl;
 	passagemDois(preFile, program, objName);
     
     main_reader.close();

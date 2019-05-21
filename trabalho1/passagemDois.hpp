@@ -127,11 +127,11 @@ void passagemDois(std::map<std::string, int> preFile, std::vector<std::string> p
                     op = getOperands(strCapitalize(line));
                 }catch(int e){
                     if(e == 1) 
-                        cout<< "\33[1;31m"<< "ERRO8 semantico na linha do arquivo fonte: "<< preFile.at(line)<< " e linha do arquivo pre processado: "<< i+1 <<"\033[0m" << endl;
+                        cout<< "\33[1;31m"<< "ERRO semantico na linha do arquivo fonte: "<< preFile.at(line)<< " e linha do arquivo pre processado: "<< i+1 <<"\033[0m" << endl;
                     else if(e == 2)
-                        cout<< "\33[1;31m"<< "ERRO9 lexico na linha do arquivo fonte: "<< preFile.at(line)<< " e linha do arquivo pre processado: "<< i+1 <<"\033[0m" << endl;
+                        cout<< "\33[1;31m"<< "ERRO lexico na linha do arquivo fonte: "<< preFile.at(line)<< " e linha do arquivo pre processado: "<< i+1 <<"\033[0m" << endl;
                     else if(e == 3)
-                        cout<< "\33[1;31m"<< "ERRO10 sintatico na linha do arquivo fonte: "<< preFile.at(line)<< " e linha do arquivo pre processado: "<< i+1 <<"\033[0m" << endl;
+                        cout<< "\33[1;31m"<< "ERRO sintatico na linha do arquivo fonte: "<< preFile.at(line)<< " e linha do arquivo pre processado: "<< i+1 <<"\033[0m" << endl;
                 };
                 if(op.size() == 1) obj << opCode << " " << op.at(0) << " ";  
                 else if(op.size() == 2 && opCode == 9) obj << opCode << " " << op.at(0) << " " << op.at(1) << " ";
