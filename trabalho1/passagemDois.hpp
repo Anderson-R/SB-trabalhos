@@ -100,7 +100,16 @@ void passagemDois(std::map<std::string, int> preFile, std::vector<std::string> p
             i++;
             line = program.at(i);
         }
-        std::string inst = getInst(line);
+        std::string inst;
+        try{
+            inst = getInst(line);
+        }catch(int e){
+            if(e==1){
+                i++;
+                line = program.at(i);
+                inst = getInst(line);
+            }
+        }
         if(verifyInst(inst)){
             std::vector<int> op;
             int opCode = INSTRUCTIONS.at(strCapitalize(inst));

@@ -94,6 +94,7 @@ string getInst(string line){
         if(lineCopy.at(0) == ' ') lineCopy.erase(0, 1);
         inst = splitPUm(lineCopy, ' ')[0];
     }
+    else if(ctnRot == 2) throw 1;
     locale loc;
     for(int i=0; i< inst.length(); i++){
         inst[i] = toupper(inst[i], loc);
@@ -183,7 +184,18 @@ map<string, int> passagemUm(map<string, int> pre, vector<string> program){
             label.erase();
 
             //instrução e diretiva
-            string inst = getInst(line);
+            string inst;
+            try{
+                inst = getInst(line);
+            }catch(int e){
+                if(e==1){
+                    i++;
+                    lineCounter++;
+                    line = program.at(i);
+                    inst = getInst(line);
+                }
+            }
+            
             if(!verifyInst(inst) && !verifyDir(inst)){
                 cout<< "\33[1;31m"<< "ERRO1 sintatico na linha do aqruivo fonte: "<< pre.at(line)<< " e linha do aquivo pre processado: " << lineCounter << "\033[0m"<< endl;
             }
