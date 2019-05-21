@@ -159,6 +159,8 @@ map<string, int> passagemUm(map<string, int> pre, vector<string> program){
     for(int i=0; i<program.size(); i++){
         line = program.at(i);
         //section
+        if(i == 0 && strCapitalize(line) != "SECTION TEXT")
+            cout<< "\33[1;31m"<< "ERRO0 semantico na linha do aqruivo fonte: "<< pre.at(line)<< " e linha do aquivo pre processado: " << lineCounter << "\033[0m"<< endl;
         if(strCapitalize(line) == "SECTION TEXT") {
             inText = true;
             inData = false;
