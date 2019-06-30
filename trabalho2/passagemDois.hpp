@@ -173,7 +173,10 @@ void passagemDois(std::map<std::string, int> preFile, std::vector<std::string> p
                 if(op.size() == 1) obj << opCode << " " << op.at(0) << " ";  
                 else if(op.size() == 2 && opCode == 9) obj << opCode << " " << op.at(0) << " " << op.at(1) << " ";
             }
-            else obj << opCode << " ";
+            else {
+                obj << opCode << " ";
+                ia32 << callFunc(opCode);
+            }
             op.clear();
 
 
