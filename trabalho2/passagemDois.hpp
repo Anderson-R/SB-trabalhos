@@ -166,7 +166,7 @@ void passagemDois(std::map<std::string, int> preFile, std::vector<std::string> p
                 };
 
                 try{
-                    ia32 << callFunc(opCode, getOpStr(line).at(0));
+                    ia32 << callFunc(opCode, getOpStr(line));
                 }
                 catch(int e){}
 

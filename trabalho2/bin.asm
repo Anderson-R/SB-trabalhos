@@ -25,6 +25,9 @@ jmp L2
 jmpn L2
 jmpp L2
 jmpz L2
+load OLD_DATA
+store OLD_DATA
+copy NEW_DATA, OLD_DATA
 STOP
 
 ;loool

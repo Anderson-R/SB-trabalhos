@@ -1,10 +1,16 @@
 section .data
 msg db 'Hello World!', 0dh, 0ah
 msgb db 'hello world!', 0dh, 0ah
-old_data dd 1
+old_data dd 0
+data dd -1
 section .text
 global _start
-_start: mov eax, 0
+_start:	
+	push eax
+	mov eax, [old_data] 
+	mov dword [data], eax
+	pop eax 
+	mov eax, [data]
 	cmp eax, 0
 	jz l2
 l1:	mov eax, 4
