@@ -21,7 +21,10 @@ mult DOIS
 OUTPUT TMP_DATA
 COPY NEW_DATA, OLD_DATA
 LOAD OLD_DATA
+jmp L2
+jmpn L2
 jmpp L2
+jmpz L2
 STOP
 
 ;loool

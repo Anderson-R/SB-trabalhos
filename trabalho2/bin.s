@@ -7,6 +7,13 @@ idiv [DOIS]
 imul [DOIS]
 sub eax, [TMP_DATA]
 imul [DOIS]
+jmp L2
+cmp eax, 0
+jl L2
+cmp eax, 0
+jg L2
+cmp eax, 0
+jz L2
 section .data
 DOIS dd 2
 OLD_DATA dd 0
