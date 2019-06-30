@@ -17,8 +17,7 @@ int main(int argc, char** argv){
 	}
 
 	std::ifstream main_reader;
-	std::string objName = splitPUm(argv[1], '.').front();
-	objName.append(".obj");
+	std::string fileName = splitPUm(argv[1], '.').front();
     main_reader.open(argv[1]);
     std::fstream preWriter;
 	preWriter.open(split(argv[1], '.').front() + ".pre", std::fstream::in | std::fstream::out | std::fstream::trunc);
@@ -33,7 +32,7 @@ int main(int argc, char** argv){
     passagemZero(main_reader, preWriter, preFile, program);
 	std::map<std::string, int> st = passagemUm(preFile, program);
 	std::map<std::string, int>::iterator it = st.begin();
-	passagemDois(preFile, program, objName);
+	passagemDois(preFile, program, fileName);
     
     main_reader.close();
 	preWriter.close();

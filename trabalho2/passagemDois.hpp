@@ -5,6 +5,8 @@
 #include <string>
 #include <fstream>
 #include "passagemUm.hpp"
+#include "ia32Intructions.hpp"
+#include "ia32Data.hpp"
 
 //returns number of operands, if wrong number of operands for the instruction in line return -1
 uint8_t verifyOperands(string line){
@@ -97,14 +99,63 @@ std::vector<int> getOperands(std::string line){
     return ret;
 }
 
+//retorna um vetor de strings com o(s) operando(s)
+std::vector<std::string> getOpStr(std::string line){
+    std::string inst = getInst(line);
+    int instSize = inst.size();
+    size_t pos = line.find(inst);
+    std::string operand = line.substr(pos+instSize);
+    trimWhiteSpace(operand);
+    if(operand.size() == 0) throw 3;
+    return splitPUm(operand, ',');
+}
+
+//retorna a linha a ser inseriado no arquivo de saída (arquivo.s)
+std::string callFunc(int inst, std::string op){
+    switch (inst){
+        case 1:
+            return add(op);
+            break;
+        case 2:
+            return sub(op);
+            break;
+        case 3:
+            return mult(op);
+            break;
+        case 4:
+            return div(op);
+            break;
+        default:
+            throw -1;
+            break;
+    }
+}
+
+int getSpaceSize(std::string line){
+    std::string size = splitPUm(line, ' ').back();
+    if(isNumber(size)) return stoi(size);
+    return 1;
+}
+
 
 void passagemDois(std::map<std::string, int> preFile, std::vector<std::string> program, std::string fileName){
     std::string line;
     std::ofstream obj;
+    std::ofstream ia32;
     int dataPos;
+
+    fileName.append(".o");
     obj.open(fileName, std::fstream::out | std::fstream::trunc);
+
+    fileName = splitPUm(fileName, '.').front();
+    fileName.append(".s");
+    ia32.open(fileName, std::fstream::out | std::fstream::trunc);
+
     for(int i=0; i<program.size(); i++){
-        line = program.at(i);
+        line = strCapitalize(program.at(i));
+        if(line == "SECTION TEXT") ia32 << "section .text\n";
+        else if(line == "SECTION DATA") ia32 << "section .data\n";
+
         if(line == "SECTION TEXT" || line == "SECTION DATA"){
             i++;
             line = program.at(i);
@@ -133,21 +184,32 @@ void passagemDois(std::map<std::string, int> preFile, std::vector<std::string> p
                     else if(e == 3)
                         cout<< "\33[1;31m"<< "ERRO sintatico na linha do arquivo fonte: "<< preFile.at(line)<< " e linha do arquivo pre processado: "<< i+1 <<"\033[0m" << endl;
                 };
+
+                try{
+                    ia32 << callFunc(opCode, getOpStr(line).at(0));
+                }
+                catch(int e){}
+
                 if(op.size() == 1) obj << opCode << " " << op.at(0) << " ";  
                 else if(op.size() == 2 && opCode == 9) obj << opCode << " " << op.at(0) << " " << op.at(1) << " ";
             }
             else obj << opCode << " ";
             op.clear();
+
+
         }
         else if(verifyDir(strCapitalize(inst))){
             string rot;  
             containRot(line, &rot);
+            if(strCapitalize(inst) == "CONST") ia32 << dataInit(rot, data.at(simbolTable.at(rot)));
+            else ia32 << dataNotInit(rot, getSpaceSize(line));
             obj << data.at(simbolTable.at(rot)) << " ";
         }
     }
 
 
     obj.close();
+    ia32.close();
 }
 
 
