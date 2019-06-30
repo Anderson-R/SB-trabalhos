@@ -92,7 +92,7 @@ std::string stop(){
 std::string c_output(std::string mem){
     std::string ret;
     ret.append("push "); ret.append(mem); ret.append("\n");
-    ret.append("call escreverChar");
+    ret.append("call escreverChar\n");
     return ret;
 }
 
@@ -100,7 +100,7 @@ std::string c_output(std::string mem){
 std::string c_input(std::string mem){
     std::string ret;
     ret.append("push "); ret.append(mem); ret.append("\n");
-    ret.append("call lerChar");
+    ret.append("call lerChar\n");
     return ret;
 }
 

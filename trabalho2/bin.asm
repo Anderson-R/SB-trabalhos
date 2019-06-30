@@ -29,7 +29,7 @@ load OLD_DATA
 store OLD_DATA
 copy NEW_DATA, OLD_DATA
 c_output DOIS
-;c_input DOIS
+c_input DOIS
 STOP
 
 ;loool
