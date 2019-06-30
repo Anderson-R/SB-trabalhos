@@ -130,6 +130,8 @@ void passagemDois(std::map<std::string, int> preFile, std::vector<std::string> p
     fileName = splitPUm(fileName, '.').front();
     fileName.append(".s");
     ia32.open(fileName, std::fstream::out | std::fstream::trunc);
+
+    ia32 << utilFunc();
     
     for(int i=0; i<program.size(); i++){
         line = strCapitalize(program.at(i));

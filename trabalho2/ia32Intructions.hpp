@@ -158,6 +158,8 @@ std::string callFunc(int inst, std::vector<std::string> op = {""}){
 //retorna string com todas as subrotinas de input e output do assembly inventado
 std::string utilFunc(){
     std::string ret;
+    ret.append(";Util functions\n");
+
     //escreverChar
     ret.append("escreverChar:\n");
     ret.append("push ebp\n");
@@ -184,6 +186,9 @@ std::string utilFunc(){
     ret.append("pop ebp\n");
     ret.append("ret 4\n");
 
+
+    ret.append("\n\n");
+    return ret;
 }
 
 #endif
