@@ -110,27 +110,7 @@ std::vector<std::string> getOpStr(std::string line){
     return splitPUm(operand, ',');
 }
 
-//retorna a linha a ser inseriado no arquivo de saída (arquivo.s)
-std::string callFunc(int inst, std::string op){
-    switch (inst){
-        case 1:
-            return add(op);
-            break;
-        case 2:
-            return sub(op);
-            break;
-        case 3:
-            return mult(op);
-            break;
-        case 4:
-            return div(op);
-            break;
-        default:
-            throw -1;
-            break;
-    }
-}
-
+//retorna o tamanho da vetor declarado com SPACE, se nenhum tamanho foi definido o padrão é um.
 int getSpaceSize(std::string line){
     std::string size = splitPUm(line, ' ').back();
     if(isNumber(size)) return stoi(size);
