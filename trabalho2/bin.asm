@@ -28,12 +28,14 @@ jmpz L2
 load OLD_DATA
 store OLD_DATA
 copy NEW_DATA, OLD_DATA
+c_output DOIS
+;c_input DOIS
 STOP
 
 ;loool
 
 SECTION         data
-DOIS: const 2
+DOIS: const 67
 OLD_DATA: space
 NEW_DATA: SPACE 2
 

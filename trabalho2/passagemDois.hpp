@@ -120,17 +120,17 @@ int getSpaceSize(std::string line){
 
 void passagemDois(std::map<std::string, int> preFile, std::vector<std::string> program, std::string fileName){
     std::string line;
-    std::ofstream obj;
+    //std::ofstream obj;
     std::ofstream ia32;
     int dataPos;
 
     fileName.append(".o");
-    obj.open(fileName, std::fstream::out | std::fstream::trunc);
+    //obj.open(fileName, std::fstream::out | std::fstream::trunc);
 
     fileName = splitPUm(fileName, '.').front();
     fileName.append(".s");
     ia32.open(fileName, std::fstream::out | std::fstream::trunc);
-
+    
     for(int i=0; i<program.size(); i++){
         line = strCapitalize(program.at(i));
         if(line == "SECTION TEXT") ia32 << "section .text\n";
@@ -153,6 +153,7 @@ void passagemDois(std::map<std::string, int> preFile, std::vector<std::string> p
         if(verifyInst(inst)){
             std::vector<int> op;
             int opCode = INSTRUCTIONS.at(strCapitalize(inst));
+            
             if(opCode != 14){
                 try{
                     op = getOperands(strCapitalize(line));
@@ -170,11 +171,11 @@ void passagemDois(std::map<std::string, int> preFile, std::vector<std::string> p
                 }
                 catch(int e){}
 
-                if(op.size() == 1) obj << opCode << " " << op.at(0) << " ";  
-                else if(op.size() == 2 && opCode == 9) obj << opCode << " " << op.at(0) << " " << op.at(1) << " ";
+                //if(op.size() == 1) obj << opCode << " " << op.at(0) << " ";  
+                //else if(op.size() == 2 && opCode == 9) obj << opCode << " " << op.at(0) << " " << op.at(1) << " ";
             }
             else {
-                obj << opCode << " ";
+                //obj << opCode << " ";
                 ia32 << callFunc(opCode);
             }
             op.clear();
@@ -186,12 +187,11 @@ void passagemDois(std::map<std::string, int> preFile, std::vector<std::string> p
             containRot(line, &rot);
             if(strCapitalize(inst) == "CONST") ia32 << dataInit(rot, data.at(simbolTable.at(rot)));
             else ia32 << dataNotInit(rot, getSpaceSize(line));
-            obj << data.at(simbolTable.at(rot)) << " ";
+            //obj << data.at(simbolTable.at(rot)) << " ";
         }
     }
 
-
-    obj.close();
+    //obj.close();
     ia32.close();
 }
 

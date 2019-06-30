@@ -30,11 +30,12 @@ push eax
 mov eax, [NEW_DATA]
 mov dword [OLD_DATA], eax
 pop eax
-mov eax, 1
+push DOIS
+call escreverCharmov eax, 1
 mov ebx, 0
 int 80h
 section .data
-DOIS dd 2
+DOIS dd 67
 OLD_DATA dd 0
 NEW_DATA dd 0, 0
 TMP_DATA dd 0

@@ -24,7 +24,13 @@ map<string, int> INSTRUCTIONS = {{"ADD", 1},
                                 {"STORE", 11},
                                 {"INPUT", 12},
                                 {"OUTPUT", 13},
-                                {"STOP", 14}
+                                {"STOP", 14},
+                                {"C_INPUT", 15},
+                                {"C_OUTPUT", 16},
+                                {"H_INPUT", 17},
+                                {"H_OUTPUT", 18},
+                                {"S_INPUT", 19},
+                                {"S_OUTPUT", 20}
 };
 
 vector<string> DIRETIVAS = {{"CONST"}, {"SPACE"}};

@@ -88,11 +88,20 @@ std::string stop(){
     return ret;
 }
 
-//retorna string da tradução da instrução stop
+//retorna string da tradução da instrução c_output
 std::string c_output(std::string mem){
     std::string ret;
     ret.append("push "); ret.append(mem); ret.append("\n");
     ret.append("call escreverChar");
+    return ret;
+}
+
+//retorna string da tradução da instrução c_intput
+std::string c_input(std::string mem){
+    std::string ret;
+    ret.append("push "); ret.append(mem); ret.append("\n");
+    ret.append("call lerChar");
+    return ret;
 }
 
 //retorna a linha a ser inserida no arquivo de saída (arquivo.s)
@@ -137,6 +146,9 @@ std::string callFunc(int inst, std::vector<std::string> op = {""}){
         case 16:
             return c_output(op.at(0));
             break;
+        case 15:
+            return c_input(op.at(0));
+            break;
         default:
             throw -1;
             break;
@@ -150,6 +162,19 @@ std::string utilFunc(){
     ret.append("escreverChar:\n");
     ret.append("push ebp\n");
     ret.append("mov ax, 1\n");
+    ret.append("mov ebp, esp\n");
+    ret.append("mov eax, 4\n");
+    ret.append("mov ebx, 1\n");
+    ret.append("mov ecx, [ebp+8]\n");
+    ret.append("mov edx, 1\n");
+    ret.append("int 80h\n");
+    ret.append("pop ebp\n");
+    ret.append("ret 4\n");
+
+    //lerChar
+    ret.append("lerChar:\n");
+    ret.append("push ebp\n");
+    ret.append("mov ax, 0\n");
     ret.append("mov ebp, esp\n");
     ret.append("mov eax, 4\n");
     ret.append("mov ebx, 1\n");
