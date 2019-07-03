@@ -50,7 +50,42 @@ pop edx
 pop ecx
 pop ebx
 pop ebp
+mov ax, [ebp+12]
+ret 8
+
+lerString:
+push ebp
+mov ebp, esp
+push ebx
+push ecx
+push edx
+mov eax, 3
+mov ebx, 0
+mov ecx, [ebp+8]
+mov edx, [ebp+12]
+int 80h
+push edx
+push ecx
+call countTillEnter
+pop edx
+pop ecx
+pop ebx
+pop ebp
 mov ax, 1
+ret 8
+
+countTillEnter: push ebp
+mov ebp, esp
+push ebx
+mov ebx, [ebp+8]
+mov eax, -1
+compare: cmp eax, [ebp+12]
+je end
+inc eax
+cmp byte [ebx+eax], 0x0A
+jne compare
+end: pop ebx
+pop ebp
 ret 8
 
 

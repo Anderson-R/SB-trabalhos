@@ -229,7 +229,43 @@ std::string utilFunc(){
     ret.append("mov ax, [ebp+12]\n");
     ret.append("ret 8\n\n");
 
+    //lerString
+    ret.append("lerString:\n");
+    ret.append("push ebp\n");
+    ret.append("mov ebp, esp\n");
+    ret.append("push ebx\n");
+    ret.append("push ecx\n");
+    ret.append("push edx\n");
+    ret.append("mov eax, 3\n");
+    ret.append("mov ebx, 0\n");
+    ret.append("mov ecx, [ebp+8]\n");
+    ret.append("mov edx, [ebp+12]\n");
+    ret.append("int 80h\n");
+    ret.append("push edx\n");
+    ret.append("push ecx\n");
+    ret.append("call countTillEnter\n");
+    ret.append("pop edx\n");
+    ret.append("pop ecx\n");
+    ret.append("pop ebx\n");
+    ret.append("pop ebp\n");
+    ret.append("mov ax, 1\n");
+    ret.append("ret 8\n\n");
 
+
+    //conta quantos caracteres foram lidos
+    ret.append("countTillEnter: push ebp\n");
+    ret.append("mov ebp, esp\n");
+    ret.append("push ebx\n");
+    ret.append("mov ebx, [ebp+8]\n");
+    ret.append("mov eax, -1\n");
+    ret.append("compare: cmp eax, [ebp+12]\n");
+    ret.append("je end\n");
+    ret.append("inc eax\n");
+    ret.append("cmp byte [ebx+eax], 0x0A\n");
+    ret.append("jne compare\n");
+    ret.append("end: pop ebx\n");
+    ret.append("pop ebp\n");
+    ret.append("ret 8\n\n");
     ret.append("\n\n");
     return ret;
 }
