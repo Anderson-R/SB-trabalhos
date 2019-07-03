@@ -16,12 +16,12 @@ std::string sub(std::string op){
 
 //retorna string da tradução da instrução mult
 std::string mult(std::string op){
-    return "imul [" + op + "]\n";
+    return "imul dword [" + op + "]\n";
 }
 
 //retorna string da tradução da instrução div
 std::string div(std::string op){
-    return "idiv [" + op + "]\n";
+    return "idiv dword [" + op + "]\n";
 }
 
 //retorna string da tradução da instrução jmp
@@ -163,28 +163,40 @@ std::string utilFunc(){
     //escreverChar
     ret.append("escreverChar:\n");
     ret.append("push ebp\n");
-    ret.append("mov ax, 1\n");
     ret.append("mov ebp, esp\n");
+    ret.append("push ebx\n");
+    ret.append("push ecx\n");
+    ret.append("push edx\n");
     ret.append("mov eax, 4\n");
     ret.append("mov ebx, 1\n");
     ret.append("mov ecx, [ebp+8]\n");
     ret.append("mov edx, 1\n");
     ret.append("int 80h\n");
+    ret.append("pop edx\n");
+    ret.append("pop ecx\n");
+    ret.append("pop ebx\n");
     ret.append("pop ebp\n");
-    ret.append("ret 4\n");
+    ret.append("mov ax, 1\n");
+    ret.append("ret 4\n\n");
 
     //lerChar
     ret.append("lerChar:\n");
     ret.append("push ebp\n");
-    ret.append("mov ax, 0\n");
     ret.append("mov ebp, esp\n");
-    ret.append("mov eax, 4\n");
-    ret.append("mov ebx, 1\n");
+    ret.append("push ebx\n");
+    ret.append("push ecx\n");
+    ret.append("push edx\n");
+    ret.append("mov eax, 3\n");
+    ret.append("mov ebx, 0\n");
     ret.append("mov ecx, [ebp+8]\n");
     ret.append("mov edx, 1\n");
     ret.append("int 80h\n");
+    ret.append("pop edx\n");
+    ret.append("pop ecx\n");
+    ret.append("pop ebx\n");
     ret.append("pop ebp\n");
-    ret.append("ret 4\n");
+    ret.append("mov ax, 1\n");
+    ret.append("ret 4\n\n");
 
 
     ret.append("\n\n");

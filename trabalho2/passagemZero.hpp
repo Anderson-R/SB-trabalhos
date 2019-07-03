@@ -66,7 +66,7 @@ std::map<std::string, int> preToMap(std::fstream& preWriter, std::vector<int> li
 	for(int i=0; i<lines.size(); i++){
 		std::string line;
 		std::getline(preWriter, line);
-		program.push_back(line);
+		program.push_back(strCapitalize(line));
 		ret.insert(std::pair<std::string, int>(line, lines.at(i)));
 	}
 	return ret;

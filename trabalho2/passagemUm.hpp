@@ -59,7 +59,14 @@ vector<string> splitPUm(string in, char token){
 //caso haja rotulo o salva em rot e retorna 0, caso contrario retorna 1, erro retorna 2
 int containRot(string line, string *rot){
     vector<string> vec;
+    bool found = line.find(":") != string::npos;
     vec = splitPUm(line, ':');
+    if(vec.size() == 1 || vec.size() == 2){
+        if(found) {
+            *rot = vec[0];
+            return 0;
+        }
+    }
     if(vec.size() == 1 && vec[0] != "") return 1;
 
     if(vec.size() == 2 && vec[0] != "" && vec[1] != ""){
@@ -97,7 +104,7 @@ string getInst(string line){
         inst = splitPUm(lineCopy, ' ')[0];
     else if(ctnRot == 0){
         lineCopy.erase(0, rot.size()+1);
-        if(lineCopy.at(0) == ' ') lineCopy.erase(0, 1);
+        if(lineCopy.size() > 0 && lineCopy.at(0) == ' ') lineCopy.erase(0, 1);
         inst = splitPUm(lineCopy, ' ')[0];
     }
     else if(ctnRot == 2) throw 1;
@@ -204,7 +211,7 @@ map<string, int> passagemUm(map<string, int> pre, vector<string> program){
                 }
             }
             
-            if(!verifyInst(inst) && !verifyDir(inst)){
+            if(!verifyInst(inst) && !verifyDir(inst) && !inst.empty()){
                 cout<< "\33[1;31m"<< "ERRO lexico na linha do aqruivo fonte: "<< pre.at(line)<< " e linha do aquivo pre processado: " << lineCounter << "\033[0m"<< endl;
             }
             else{

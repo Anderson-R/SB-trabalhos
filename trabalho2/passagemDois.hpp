@@ -123,6 +123,7 @@ void passagemDois(std::map<std::string, int> preFile, std::vector<std::string> p
     //std::ofstream obj;
     std::ofstream ia32;
     int dataPos;
+    bool inText = false;
 
     fileName.append(".o");
     //obj.open(fileName, std::fstream::out | std::fstream::trunc);
@@ -135,13 +136,21 @@ void passagemDois(std::map<std::string, int> preFile, std::vector<std::string> p
     
     for(int i=0; i<program.size(); i++){
         line = strCapitalize(program.at(i));
-        if(line == "SECTION TEXT") ia32 << "section .text\n";
-        else if(line == "SECTION DATA") ia32 << "section .data\n";
+        if(line == "SECTION TEXT"){
+            ia32 << "section .text\nglobal _start\n_start:\n";
+            inText = true;
+        }
+        else if(line == "SECTION DATA") {
+            ia32 << "section .data\n";
+            inText = false;
+        }
 
         if(line == "SECTION TEXT" || line == "SECTION DATA"){
             i++;
             line = program.at(i);
         }
+        string rot;
+        if(inText && !containRot(line, &rot)) ia32 << rot << ":\n";
         std::string inst;
         try{
             inst = getInst(line);
@@ -155,11 +164,12 @@ void passagemDois(std::map<std::string, int> preFile, std::vector<std::string> p
         if(verifyInst(inst)){
             std::vector<int> op;
             int opCode = INSTRUCTIONS.at(strCapitalize(inst));
-            
+                
             if(opCode != 14){
                 try{
                     op = getOperands(strCapitalize(line));
                 }catch(int e){
+                std::cout <<e<<endl;
                     if(e == 1) 
                         cout<< "\33[1;31m"<< "ERRO semantico na linha do arquivo fonte: "<< preFile.at(line)<< " e linha do arquivo pre processado: "<< i+1 <<"\033[0m" << endl;
                     else if(e == 2)
@@ -172,7 +182,6 @@ void passagemDois(std::map<std::string, int> preFile, std::vector<std::string> p
                     ia32 << callFunc(opCode, getOpStr(line));
                 }
                 catch(int e){}
-
                 //if(op.size() == 1) obj << opCode << " " << op.at(0) << " ";  
                 //else if(op.size() == 2 && opCode == 9) obj << opCode << " " << op.at(0) << " " << op.at(1) << " ";
             }

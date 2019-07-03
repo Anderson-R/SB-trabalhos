@@ -5,10 +5,10 @@ SECTION text
 ADD OLD_DATA
 SUB OLD_DATA
 MULT OLD_DATA
-DIV OLD_DATA
+DIV DOIS
 INPUT OLD_DATA
 LOAD OLD_DATA
-L1: 
+L1:
 DIV DOIS
 STORE NEW_DATA + 1
 mult DOIS
@@ -21,16 +21,16 @@ mult DOIS
 OUTPUT TMP_DATA
 COPY NEW_DATA, OLD_DATA
 LOAD OLD_DATA
-jmp L2
+c_output DOIS
+c_input DOIS
+jmp acabou
 jmpn L2
 jmpp L2
 jmpz L2
 load OLD_DATA
 store OLD_DATA
 copy NEW_DATA, OLD_DATA
-c_output DOIS
-c_input DOIS
-STOP
+acabou: STOP
 
 ;loool
 
