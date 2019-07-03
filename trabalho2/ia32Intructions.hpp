@@ -104,6 +104,14 @@ std::string c_input(std::string mem){
     return ret;
 }
 
+std::string s_output(std::string mem, std::string size){
+    std::string ret;
+    ret.append("push "); ret.append(size); ret.append("\n");
+    ret.append("push "); ret.append(mem); ret.append("\n");
+    ret.append("call escreverString\n");
+    return ret;
+}
+
 //retorna a linha a ser inserida no arquivo de saída (arquivo.s)
 std::string callFunc(int inst, std::vector<std::string> op = {""}){
     switch (inst){
@@ -143,11 +151,14 @@ std::string callFunc(int inst, std::vector<std::string> op = {""}){
         case 14:
             return stop();
             break;
+        case 15:
+            return c_input(op.at(0));
+            break;
         case 16:
             return c_output(op.at(0));
             break;
-        case 15:
-            return c_input(op.at(0));
+        case 20:
+            return s_output(op.at(0), op.at(1));
             break;
         default:
             throw -1;
@@ -197,6 +208,26 @@ std::string utilFunc(){
     ret.append("pop ebp\n");
     ret.append("mov ax, 1\n");
     ret.append("ret 4\n\n");
+
+
+    //escreverString
+    ret.append("escreverString:\n");
+    ret.append("push ebp\n");
+    ret.append("mov ebp, esp\n");
+    ret.append("push ebx\n");
+    ret.append("push ecx\n");
+    ret.append("push edx\n");
+    ret.append("mov eax, 4\n");
+    ret.append("mov ebx, 1\n");
+    ret.append("mov ecx, [ebp+8]\n");
+    ret.append("mov edx, [ebp+12]\n");
+    ret.append("int 80h\n");
+    ret.append("pop edx\n");
+    ret.append("pop ecx\n");
+    ret.append("pop ebx\n");
+    ret.append("pop ebp\n");
+    ret.append("mov ax, [ebp+12]\n");
+    ret.append("ret 8\n\n");
 
 
     ret.append("\n\n");

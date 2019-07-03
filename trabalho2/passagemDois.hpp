@@ -85,7 +85,8 @@ std::vector<int> getOperands(std::string line){
         return ret;
     }
     else if(nOperands == 2){
-        if(strCapitalize(inst) != "COPY") throw 3;
+        std::string capInst = strCapitalize(inst);
+        if((capInst != "COPY") && (capInst != "S_INPUT") && (capInst != "S_OUTPUT")) throw 3;
         std::vector<std::string> ops = splitPUm(operand, ',');
         int op1, op2;
         if(getOperand(ops.at(0), &op1) && getOperand(ops.at(1), &op2)){

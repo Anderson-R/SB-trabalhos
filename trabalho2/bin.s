@@ -35,6 +35,24 @@ pop ebp
 mov ax, 1
 ret 4
 
+escreverString:
+push ebp
+mov ebp, esp
+push ebx
+push ecx
+push edx
+mov eax, 4
+mov ebx, 1
+mov ecx, [ebp+8]
+mov edx, [ebp+12]
+int 80h
+pop edx
+pop ecx
+pop ebx
+pop ebp
+mov ax, 1
+ret 8
+
 
 
 section .text
@@ -64,6 +82,29 @@ push DOIS
 call escreverChar
 push DOIS
 call lerChar
+push eax
+mov eax, [H]
+mov dword [HELLO], eax
+pop eax
+push eax
+mov eax, [E]
+mov dword [HELLO+1], eax
+pop eax
+push eax
+mov eax, [L]
+mov dword [HELLO+2], eax
+pop eax
+push eax
+mov eax, [L]
+mov dword [HELLO+3], eax
+pop eax
+push eax
+mov eax, [O]
+mov dword [HELLO+4], eax
+pop eax
+push 5
+push HELLO
+call escreverString
 jmp ACABOU
 cmp eax, 0
 jl L2
@@ -85,4 +126,9 @@ section .data
 DOIS dd 67
 OLD_DATA dd 0
 NEW_DATA dd 0, 0
+H dd 72
+E dd 69
+L dd 76
+O dd 79
+HELLO dd 0, 0, 0, 0, 0
 TMP_DATA dd 0

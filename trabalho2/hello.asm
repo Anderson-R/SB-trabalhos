@@ -22,6 +22,7 @@ l1:	mov eax, 4
 	int 80h
 	jmp l3
 l2:	
+push dword 5
 push msgb
 call escreverChar
 push lido
@@ -32,14 +33,14 @@ l3:	mov eax, 1
 
 
 
-escreverChar:
+escreverString:
 push ebp
 mov ax, 1
 mov ebp, esp
 mov eax, 4
 mov ebx, 1
 mov ecx, [ebp+8]
-mov edx, 1
+mov edx, [ebp+12]
 int 80h
 pop ebp
 ret 4
