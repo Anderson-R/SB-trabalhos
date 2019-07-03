@@ -112,6 +112,18 @@ std::string s_output(std::string mem, std::string size){
     return ret;
 }
 
+std::string input(std::string mem){
+    std::string ret;
+    ret.append("sub esp, 4\n"); 
+    ret.append("call lerInt\n");
+    ret.append("push ebx\n");
+    ret.append("mov ebx, [esp+4]\n");
+    ret.append("mov ["); ret.append(mem); ret.append("], ebx\n");
+    ret.append("pop ebx\n");
+    ret.append("add esp, 4\n");
+    return ret;
+}
+
 //retorna a linha a ser inserida no arquivo de saída (arquivo.s)
 std::string callFunc(int inst, std::vector<std::string> op = {""}){
     switch (inst){
@@ -147,6 +159,9 @@ std::string callFunc(int inst, std::vector<std::string> op = {""}){
             break;
         case 11:
             return store(op.at(0));
+            break;
+        case 12:
+            return input(op.at(0));
             break;
         case 14:
             return stop();
@@ -200,8 +215,9 @@ std::string utilFunc(){
     ret.append("mov eax, 3\n");
     ret.append("mov ebx, 0\n");
     ret.append("mov ecx, [ebp+8]\n");
-    ret.append("mov edx, 1\n");
+    ret.append("mov edx, 2\n");
     ret.append("int 80h\n");
+    ret.append("shr dword [ebp+8], 8\n");
     ret.append("pop edx\n");
     ret.append("pop ecx\n");
     ret.append("pop ebx\n");
@@ -222,11 +238,11 @@ std::string utilFunc(){
     ret.append("mov ecx, [ebp+8]\n");
     ret.append("mov edx, [ebp+12]\n");
     ret.append("int 80h\n");
+    ret.append("mov ax, [ebp+12]\n");
     ret.append("pop edx\n");
     ret.append("pop ecx\n");
     ret.append("pop ebx\n");
     ret.append("pop ebp\n");
-    ret.append("mov ax, [ebp+12]\n");
     ret.append("ret 8\n\n");
 
     //lerString
@@ -251,6 +267,57 @@ std::string utilFunc(){
     ret.append("mov ax, 1\n");
     ret.append("ret 8\n\n");
 
+    //ler inteiros
+    ret.append("lerInt:\n");
+    ret.append("push ebp\n");
+    ret.append("mov ebp, esp\n");
+    ret.append("push ebx\n");
+    ret.append("push ecx\n");
+    ret.append("push edx\n");
+    ret.append("mov eax, 3\n");
+    ret.append("mov ebx, 0\n");
+    ret.append("mov ecx, number\n");
+    ret.append("mov edx, 11\n");
+    ret.append("int 80h\n");
+    ret.append("push edx\n");
+    ret.append("push ecx\n");
+    ret.append("call countTillEnter\n");
+    ret.append("push dword 0\n");
+    ret.append("push eax\n");
+    ret.append("push ecx\n");
+    ret.append("call stoi\n");
+    ret.append("pop edx\n");
+    ret.append("mov dword [ebp+8], edx\n");
+    ret.append("pop edx\n");
+    ret.append("pop ecx\n");
+    ret.append("pop ebx\n");
+    ret.append("pop ebp\n");
+    ret.append("ret\n\n");
+
+    //converte string para inteiro
+    ret.append("stoi:\n");
+    ret.append("push ebp\n");
+    ret.append("mov ebp, esp\n");
+    ret.append("pusha\n");
+    ret.append("mov eax, 0\n");
+    ret.append("mov ecx, 0\n");
+    ret.append("mov edx, 0\n");
+    ret.append("mov ebx, [ebp+8]\n");
+    ret.append("cmp byte [ebx], 0x2D\n");
+    ret.append("convert: cmp byte [ebx+ecx], 0x0A\n");
+    ret.append("je stoi_fim\n");
+    ret.append("imul dword eax, 10\n");
+    ret.append("sub byte [ebx+ecx], 0x30\n");
+    ret.append("mov byte dl, [ebx+ecx]\n");
+    ret.append("add eax, edx\n");
+    ret.append("inc ecx\n");
+    ret.append("cmp ecx, [ebp+12]\n");
+    ret.append("jne convert\n");
+    ret.append("stoi_fim:\n");
+    ret.append("mov [ebp+16], eax\n");
+    ret.append("popa\n");
+    ret.append("pop ebp\n");
+    ret.append("ret 8\n\n");
 
     //conta quantos caracteres foram lidos
     ret.append("countTillEnter: push ebp\n");

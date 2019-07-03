@@ -143,6 +143,7 @@ void passagemDois(std::map<std::string, int> preFile, std::vector<std::string> p
         }
         else if(line == "SECTION DATA") {
             ia32 << "section .data\n";
+            ia32 << "number db 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0\n";
             inText = false;
         }
 

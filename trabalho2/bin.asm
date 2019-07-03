@@ -23,12 +23,17 @@ COPY NEW_DATA, OLD_DATA
 LOAD OLD_DATA
 c_output DOIS
 c_input DOIS
+c_output DOIS
 copy h, hello
 copy e, hello+1
 copy l, hello+2
 copy l, hello+3
 copy o, hello+4
 s_output hello, 5
+copy o, ok
+copy k, ok+1
+s_output ok, 2
+INPUT inteiro
 jmp acabou
 jmpn L2
 jmpp L2
@@ -48,7 +53,10 @@ h: const 72
 e: const 69
 l: const 76
 o: const 79
+k: const 75
+ok: space 2
 hello: space 5
+inteiro: space 4
 
   
 
